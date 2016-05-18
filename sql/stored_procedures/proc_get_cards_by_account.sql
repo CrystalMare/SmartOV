@@ -41,4 +41,4 @@ AS
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
 
-EXECUTE sp_addmessage 56050, 16, 'Dit is een test!';
+EXECUTE sp_addmessage 56050, 16, 'Account bestaat niet', @replace = REPLACE;
