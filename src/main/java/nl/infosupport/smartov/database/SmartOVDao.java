@@ -23,9 +23,10 @@ public interface SmartOVDao {
      *
      * @param accountId the account
      * @param saldo     the ammount to add
+     * @return the new saldo
      * @throws SmartOVException if the account doesnt exist or if the total saldo exceeds 200
      */
-    void addSaldo(UUID accountId, BigDecimal saldo) throws SmartOVException;
+    BigDecimal addSaldo(UUID accountId, BigDecimal saldo) throws SmartOVException;
 
     /**
      * <p>

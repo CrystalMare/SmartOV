@@ -9,8 +9,8 @@ public class SmartOVDummy implements SmartOVDao {
         return new BigDecimal(10);
     }
 
-    public void addSaldo(UUID accountId, BigDecimal saldo) throws SmartOVException {
-
+    public BigDecimal addSaldo(UUID accountId, BigDecimal saldo) throws SmartOVException {
+        return new BigDecimal(10).add(saldo);
     }
 
     public UUID createCard(UUID persoonId, String kaartnaam) throws SmartOVException {
