@@ -7,6 +7,7 @@ GO
 
 -- CREATE STORED PROCEDURE
 CREATE PROCEDURE PROC_UPDATE_PERSON -- EXAMPLE NAME
+    @persoonid UNIQUEIDENTIFIER,
     @naam VARCHAR(255),
     @postcode VARCHAR(10),
     @huisnummer VARCHAR(5),
@@ -22,16 +23,18 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-  IF (@naam LIKE '%[a-zA-z]%')
-  ELSE
-    RAISERROR (56100, 16, 1);
-
-  IF NOT EXISTS(SELECT 1 FROM dbo.PERSOON WHERE PERSOONID = @persoonid)
-    RAISERROR (56101, 16, 1);
---   IF (@postcode LIKE '%[^a-zA-Z]%')
+--   IF (@naam LIKE '%[a-zA-z]%')
+--   ELSE
 --     RAISERROR (56100, 16, 1);
 
+  IF (@geboortedatum) > (DATEADD(yy, -5, GETDATE()))
+    RAISERROR (56101, 16, 1);
 
+  IF @emailadres NOT LIKE '%_@__%.__%'
+    RAISERROR (56102, 16, 1);
+
+  IF @telefoonnummer LIKE '%[a-zA-Z]%'
+    RAISERROR (56103, 16, 1);
 
   UPDATE dbo.PERSOON
   SET
@@ -64,4 +67,6 @@ AS
   END CATCH
 
   EXECUTE sp_addmessage 56100, 16, 'Special characters zijn niet toegestaan!';
-  EXECUTE sp_addmessage 56101, 16, 'Persoon bestaat niet!';
+  EXECUTE sp_addmessage 56101, 16, 'Je moet ouder zijn om 5 jaar om te registreren!';
+  EXECUTE sp_addmessage 56102, 16, 'Geen valide email adress';
+  EXECUTE sp_addmessage 56103, 16, 'Characters zijn niet toegestaan in het telefoonnumer!';

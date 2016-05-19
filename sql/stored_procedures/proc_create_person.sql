@@ -22,8 +22,8 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-  IF (@naam NOT LIKE '%[a-zA-z]%')
-    RAISERROR (56220, 16, 1);
+--   IF (@naam LIKE '%[^a-zA-Z0-9]%')
+--     RAISERROR (56220, 16, 1);
 
   DECLARE @persoonid UNIQUEIDENTIFIER = NEWID();
 
@@ -36,11 +36,11 @@ AS
   IF @emailadres NOT LIKE '%_@__%.__%'
       RAISERROR (56223, 16, 1);
 
-  IF @telefoonnummer LIKE '[0-9]'
+  IF @telefoonnummer LIKE '%[a-zA-Z]%'
       RAISERROR (56224, 16, 1);
 
   INSERT INTO dbo.PERSOON (PERSOONID, NAAM, POSTCODE, HUISNUMMER, GEBOORTEDATUM, TELEFOONNUMMER, E_MAILADRES)
-  --OUTPUT PERSOONID
+      OUTPUT INSERTED.PERSOONID
   VALUES (
     @persoonid,
     @naam,
@@ -75,4 +75,4 @@ AS
   EXECUTE sp_addmessage 56221, 16, 'Als dit gebeurt wordt Sven crazy!';
   EXECUTE sp_addmessage 56222, 16, 'Je moet ouder zijn om 5 jaar om te registreren!';
   EXECUTE sp_addmessage 56223, 16, 'Geen valide email adress';
-  EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan!';
+  EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan in het telefoonnumer!', @replace = replace;
