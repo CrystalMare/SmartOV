@@ -1,7 +1,7 @@
-package nl.infosupport.presentation.controller;
+package nl.infosupport.smartov.presentation.controller;
 
 
-import nl.infosupport.presentation.controller.session.SessionHandler;
+import nl.infosupport.smartov.presentation.controller.session.SessionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

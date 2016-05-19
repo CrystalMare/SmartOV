@@ -1,4 +1,4 @@
-package nl.infosupport.presentation.controller.session;
+package nl.infosupport.smartov.presentation.controller.session;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package nl.infosupport.presentation.controller;
+package nl.infosupport.smartov.presentation.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

@@ -1,4 +1,4 @@
-package nl.infosupport.presentation.controller;
+package nl.infosupport.smartov.presentation.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import nl.infosupport.presentation.controller.session.*;
+import nl.infosupport.smartov.presentation.controller.session.SessionHandler;
 
 @WebServlet(urlPatterns = "/dashboard")
 public class DashboardPageController extends HttpServlet {
