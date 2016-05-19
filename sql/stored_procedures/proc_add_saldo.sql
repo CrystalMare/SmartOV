@@ -24,6 +24,7 @@ AS
   UPDATE dbo.ACCOUNT
   SET
     SALDO = @saldo + SALDO
+  OUTPUT INSERTED.SALDO
   WHERE ACCOUNTID  = @accountid
 
   IF @TranCounter = 0
