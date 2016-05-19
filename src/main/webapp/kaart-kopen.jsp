@@ -12,7 +12,7 @@
 <div class="main" role="main">
     <div class="container">
         <span class="main-title">Kaart kopen</span>
-        <form class="kaart" method="" action="">
+        <form class="kaart" method="post" action="">
             <ul class="kaart-list">
                 <li class="kaart-item">
                     <label class="kaart-label">Naam</label>

@@ -1,6 +1,9 @@
 package nl.infosupport.smartov.presentation.controller;
 
 
+import nl.infosupport.smartov.database.SmartOV;
+import nl.infosupport.smartov.database.SmartOVException;
+import nl.infosupport.smartov.database.dao.SmartOVDao;
 import nl.infosupport.smartov.presentation.controller.session.SessionHandler;
 
 import javax.servlet.ServletException;
@@ -10,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @WebServlet(urlPatterns = "/kaart-kopen")
 public class KaartKopenPageController extends HttpServlet {
@@ -33,14 +39,26 @@ public class KaartKopenPageController extends HttpServlet {
         String postcode = request.getParameter("postcode");
         String huisnummer = request.getParameter("huisnummer");
         String geboortedatum = request.getParameter("geboortedatum");
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = null;
+        try {
+            date = format.parse(geboortedatum);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         String telefoonnummer = request.getParameter("telefoonnummer");
         String emailadres = request.getParameter("emailadres");
 
-        /*
-        SmartOV smartOV = new SmartOV();
-        SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
-        dao.createPerson(naam, postcode, huisnummer, new Date(geboortedatum), telefoonnummer, emailadres);
-        */
+        try {
+            SmartOV smartOV = new SmartOV();
+            SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
+            dao.createPerson(naam, postcode, huisnummer, date, telefoonnummer, emailadres);
+            response.sendRedirect("/dashboard");
+        } catch (SmartOVException e) {
+            e.printStackTrace();
+        }
 
         out.close();
     }
