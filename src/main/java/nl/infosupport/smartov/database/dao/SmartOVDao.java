@@ -1,4 +1,6 @@
-package nl.infosupport.smartov.database;
+package nl.infosupport.smartov.database.dao;
+
+import nl.infosupport.smartov.database.SmartOVException;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -7,7 +9,7 @@ import java.util.UUID;
 /**
  * Provides easy access to the datastructure "SmartOV"
  */
-public interface SmartOVDao {
+public interface SmartOVDao extends CloseableDao {
 
     /**
      * Gets the saldo of a given account
