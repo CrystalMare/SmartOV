@@ -1,17 +1,28 @@
 package nl.infosupport.smartov.database;
 
-import java.util.UUID;
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 
-/**
- * Created by user on 18-5-2016.
- */
-public class SmartOV {
+public class SmartOV implements Module {
 
-    public static void main(String[] args) {
-        SmartOVDao dao = new SmartOVDummy();
+    private final Injector injector;
 
-        UUID sergio = UUID.randomUUID();
+    public SmartOV() {
+        this.injector = Guice.createInjector(this, new DatabaseModule());
+    }
 
-        System.out.println(dao.getSaldo(sergio));
+    public SmartOV getInstance() {
+        return this;
+    }
+
+    public <T> T getInstance(Class<T> target) {
+        return injector.getInstance(target);
+    }
+
+    @Override
+    public void configure(Binder binder) {
+
     }
 }

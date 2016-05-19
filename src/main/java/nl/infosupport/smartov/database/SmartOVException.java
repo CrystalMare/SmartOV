@@ -1,4 +1,10 @@
 package nl.infosupport.smartov.database;
 
-public class SmartOVException extends RuntimeException {
+import java.sql.SQLException;
+
+public class SmartOVException extends SQLException {
+
+    public SmartOVException(SQLException cause) {
+        super(cause);
+    }
 }

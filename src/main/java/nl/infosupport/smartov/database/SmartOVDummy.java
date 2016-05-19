@@ -1,10 +1,13 @@
 package nl.infosupport.smartov.database;
 
+import nl.infosupport.smartov.database.dao.SmartOVDao;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-public class SmartOVDummy implements SmartOVDao {
+class SmartOVDummy implements SmartOVDao {
+
     public BigDecimal getSaldo(UUID accountId) throws SmartOVException {
         return new BigDecimal(10);
     }
@@ -24,6 +27,11 @@ public class SmartOVDummy implements SmartOVDao {
 
     public void updatePerson(UUID personId, String naam, String postcode, String huisnummer, Date geboortedatum,
                              String telefoonummer, String email) throws SmartOVException {
+
+    }
+
+    @Override
+    public void close() {
 
     }
 }
