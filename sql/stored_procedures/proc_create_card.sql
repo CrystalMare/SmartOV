@@ -8,8 +8,9 @@ GO
 -- CREATE STORED PROCEDURE
 CREATE PROCEDURE PROC_CREATE_CARD -- EXAMPLE NAME
     @kaartnummer CHAR(16),
-    @kaartnaam VARCHAR(255),
-    @vervaldatum DATETIME
+    @kaartnaam   VARCHAR(255),
+    @vervaldatum DATETIME,
+    @persoon     UNIQUEIDENTIFIER
 AS
   DECLARE @TranCounter INT;
   SET @TranCounter = @@TRANCOUNT;
@@ -20,20 +21,30 @@ AS
   BEGIN TRY
 
   IF LEN(@kaartnaam) > 26
-      RAISERROR (56210, 16, 1)
+    RAISERROR (56210, 16, 1)
 
   IF @vervaldatum < GETDATE()
-      RAISERROR (56211, 16 ,1)
+    RAISERROR (56211, 16, 1)
+
+  DECLARE @kaart UNIQUEIDENTIFIER;
+  SET @kaart = NEWID();
 
   INSERT INTO dbo.KAART (KAARTID, KAARTNUMMER, KAARTNAAM, VERVALDATUM, KOPPELDATUM)
-      OUTPUT INSERTED.KAARTID
   VALUES (
-    NEWID(),
+    @kaart,
     @kaartnummer,
     @kaartnaam,
     @vervaldatum,
     GETDATE()
   )
+
+  INSERT INTO dbo.PERSOONLIJKE_KAART (KAARTID, PERSOONID)
+  VALUES (
+    @kaart,
+    @persoon
+  );
+
+  SELECT @kaart;
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
