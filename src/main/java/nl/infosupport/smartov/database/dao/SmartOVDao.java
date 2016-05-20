@@ -1,6 +1,7 @@
 package nl.infosupport.smartov.database.dao;
 
 import nl.infosupport.smartov.database.SmartOVException;
+import nl.infosupport.smartov.database.model.Persoon;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -73,6 +74,14 @@ public interface SmartOVDao extends CloseableDao {
      */
     void updatePerson(UUID personId, String naam, String postcode, String huisnummer, Date geboortedatum,
                       String telefoonummer, String email) throws SmartOVException;
+
+    /**
+     * Gets a person from the ID
+     *
+     * @param personId the id
+     * @return the person
+     */
+    Persoon getPerson(UUID personId) throws SmartOVException;
 
 
 }

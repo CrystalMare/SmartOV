@@ -2,6 +2,7 @@ package nl.infosupport.smartov.database;
 
 import lombok.extern.log4j.Log4j;
 import nl.infosupport.smartov.database.dao.SmartOVDao;
+import nl.infosupport.smartov.database.model.Persoon;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -99,6 +100,22 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             ps.setString(6, email);
             ps.setString(7, personId.toString());
             ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public Persoon getPerson(UUID personId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_PERSON @PersoonID = ?;"
+            );
+            ps.setString(1, personId.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return new Persoon(personId, rs.getString("NAAM"), rs.getString("POSTCODE"), rs.getString("HUISNUMMER"),
+                    rs.getDate("GEBOORTEDATUM"), rs.getString("TELEFOONNUMMER"), rs.getString("E_MAILADRES"));
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }
