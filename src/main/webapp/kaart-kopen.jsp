@@ -39,8 +39,17 @@
                     <input class="kaart-input" type="text" name="emailadres" />
                 </li>
                 <li class="kaart-item">
+                    <label class="kaart-label">Kaartnaam</label>
+                    <input class="kaart-input" type="text" name="kaartnaam" />
+                </li>
+                <li class="kaart-item">
+                    <label class="kaart-label">Vervaldatum</label>
+                    <input class="kaart-input" type="text" name="vervaldatum" />
+                </li>
+                <li class="kaart-item">
                     <input class="btn" type="submit" value="Opwaarderen" />
                 </li>
+
             </ul>
         </form>
     </div>

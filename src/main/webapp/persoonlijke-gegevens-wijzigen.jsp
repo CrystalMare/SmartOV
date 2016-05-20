@@ -16,27 +16,27 @@
             <ul class="kaart-list">
                 <li class="kaart-item">
                     <label class="kaart-label">Naam</label>
-                    <input class="kaart-input" type="text" name="" />
+                    <input class="kaart-input" type="text" name="naam" value="${naam}" />
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">Postcode</label>
-                    <input class="kaart-input" type="text" name="" />
+                    <input class="kaart-input" type="text" name="postcode" value="${postcode}"/>
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">Huisnummer</label>
-                    <input class="kaart-input" type="text" name="" />
+                    <input class="kaart-input" type="text" name="huisnummer" value="${huisnummer}" />
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">Geboortedatum</label>
-                    <input class="kaart-input" type="text" name="" />
+                    <input class="kaart-input" type="text" name="geboortedatum" value="${geboortedatum}" />
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">Telefoonnummer</label>
-                    <input class="kaart-input" type="text" name="" />
+                    <input class="kaart-input" type="text" name="telefoonnumer" value="${telefoonnummer}" />
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">E-mailadres</label>
-                    <input class="kaart-input" type="text" name="" />
+                    <input class="kaart-input" type="text" name="email" value="${email}" />
                 </li>
                 <li class="kaart-item">
                     <input class="btn" type="submit" value="Opwaarderen" />
