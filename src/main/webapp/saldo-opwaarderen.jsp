@@ -13,18 +13,18 @@
         <div class="container">
             <span class="main-title">Saldo opwaarderen</span>
             <span class="saldo-current">
-                <span class="saldo-current-item">Huidig saldo: € 0.00</span>
+                <span class="saldo-current-item">Huidig saldo: € ${saldo}</span>
             </span>
             <form class="saldo" method="post" action="">
                 <ul class="saldo-list">
                     <li class="saldo-item">
-                        <label class="saldo-label"><input class="saldo-input" type="radio" name="group1" value="10" /> € 10,-</label>
+                        <label class="saldo-label"><input class="saldo-input" type="radio" name="saldo" value="10" /> € 10,-</label>
                     </li>
                     <li class="saldo-item">
-                        <label class="saldo-label"><input class="saldo-input" type="radio" name="group1" value="20" /> € 20,-</label>
+                        <label class="saldo-label"><input class="saldo-input" type="radio" name="saldo" value="20" /> € 20,-</label>
                     </li>
                     <li class="saldo-item">
-                        <label class="saldo-label"><input class="saldo-input" type="radio" name="group1" value="50" /> € 50,-</label>
+                        <label class="saldo-label"><input class="saldo-input" type="radio" name="saldo" value="50" /> € 50,-</label>
                     </li>
                     <li class="saldo-item">
                         <input class="btn" type="submit" value="Opwaarderen" />
