@@ -12,7 +12,7 @@
 <div class="main" role="main">
     <div class="container">
         <span class="main-title">Persoonlijke gegevens wijzigen</span>
-        <form class="kaart" method="" action="">
+        <form class="kaart" method="post" action="">
             <ul class="kaart-list">
                 <li class="kaart-item">
                     <label class="kaart-label">Naam</label>
@@ -32,14 +32,14 @@
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">Telefoonnummer</label>
-                    <input class="kaart-input" type="text" name="telefoonnumer" value="${telefoonnummer}" />
+                    <input class="kaart-input" type="text" name="telefoonnummer" value="${telefoonnummer}" />
                 </li>
                 <li class="kaart-item">
                     <label class="kaart-label">E-mailadres</label>
                     <input class="kaart-input" type="text" name="email" value="${email}" />
                 </li>
                 <li class="kaart-item">
-                    <input class="btn" type="submit" value="Opwaarderen" />
+                    <input class="btn" type="submit" value="Wijzigen" />
                 </li>
             </ul>
         </form>

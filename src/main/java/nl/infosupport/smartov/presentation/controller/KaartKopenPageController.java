@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @WebServlet(urlPatterns = "/kaart-kopen")
 public class KaartKopenPageController extends HttpServlet {
@@ -50,11 +51,20 @@ public class KaartKopenPageController extends HttpServlet {
 
         String telefoonnummer = request.getParameter("telefoonnummer");
         String emailadres = request.getParameter("emailadres");
+        String kaartnaam = request.getParameter("kaartnaam");
 
-        try {
-            SmartOV smartOV = new SmartOV();
-            SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
-            dao.createPerson(naam, postcode, huisnummer, date, telefoonnummer, emailadres);
+        UUID persoonid = null;
+
+        SmartOV smartOV = new SmartOV();
+
+        try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
+            persoonid = dao.createPerson(naam, postcode, huisnummer, date, telefoonnummer, emailadres);
+        } catch (SmartOVException e) {
+            e.printStackTrace();
+        }
+
+        try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
+            dao.createCard(persoonid , kaartnaam);
             response.sendRedirect("/dashboard");
         } catch (SmartOVException e) {
             e.printStackTrace();

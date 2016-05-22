@@ -9,7 +9,7 @@ GO
 CREATE PROCEDURE PROC_CREATE_CARD -- EXAMPLE NAME
     @kaartnummer CHAR(16),
     @kaartnaam VARCHAR(255),
-    @vervaldatum DATETIME
+    @persoonid UNIQUEIDENTIFIER
 AS
   DECLARE @TranCounter INT;
   SET @TranCounter = @@TRANCOUNT;
@@ -22,16 +22,23 @@ AS
   IF LEN(@kaartnaam) > 26
       RAISERROR (56210, 16, 1)
 
-  IF @vervaldatum < GETDATE()
-      RAISERROR (56211, 16 ,1)
+  DECLARE @kaartid UNIQUEIDENTIFIER = NEWID()
 
   INSERT INTO dbo.KAART (KAARTID, KAARTNUMMER, KAARTNAAM, VERVALDATUM, KOPPELDATUM)
+      OUTPUT INSERTED.KAARTID
   VALUES (
-    NEWID(),
+    @kaartid,
     @kaartnummer,
     @kaartnaam,
-    @vervaldatum,
+    DATEADD(yy, 5, GETDATE()),
     GETDATE()
+  )
+
+  INSERT INTO dbo.PERSOONLIJKE_KAART(KAARTID, PERSOONID)
+      OUTPUT INSERTED.KAARTID
+  VALUES (
+    @kaartid,
+    @persoonid
   )
 
   IF @TranCounter = 0

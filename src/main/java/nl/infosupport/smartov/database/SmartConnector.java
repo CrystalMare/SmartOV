@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -58,15 +59,14 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public UUID createCard(UUID persoonId, String kaartnaam) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_CREATE_CARD @kaartnummer = ?, @kaartnaam = ?, @vervaldatum = ?, " +
-                            "@persoon = ?;"
+                    "EXECUTE smartov.dbo.PROC_CREATE_CARD @kaartnummer = ?, @kaartnaam = ?, @persoonId = ?;"
             );
             ps.setString(1, new Random().ints(16, 0, 9).mapToObj(Integer::toString).collect(Collectors.joining()));
             ps.setString(2, kaartnaam);
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.YEAR, 2);
-            ps.setDate(3, new java.sql.Date(calendar.getTime().getTime()));
-            ps.setString(4, persoonId.toString());
+            //ps.setDate(3, new java.sql.Date(calendar.getTime().getTime()));
+            ps.setString(3, persoonId.toString());
             ResultSet rs = ps.executeQuery();
             rs.next();
             return UUID.fromString(rs.getString(1));
