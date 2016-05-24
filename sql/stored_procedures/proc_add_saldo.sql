@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 USE smartov -- EXAMPLE DATABASENAME
 GO
 
@@ -10,18 +9,6 @@ GO
 CREATE PROCEDURE PROC_ADD_SALDO -- EXAMPLE NAME
     @accountid UNIQUEIDENTIFIER, -- EXAMPLE PARAMETERS
     @saldo INT
-=======
-USE EXAMPLEDATABASE -- EXAMPLE DATABASENAME
-GO
-
-IF OBJECT_ID('SaveTranExample', 'P') IS NOT NULL -- EXAMPLE PROCEDURE NAME
-  DROP PROCEDURE SaveTranExample
-GO
-
--- CREATE STORED PROCEDURE
-CREATE PROCEDURE SaveTranExample -- EXAMPLE NAME
-    @InputCandidateID INT -- EXAMPLE PARAMETERS
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 AS
   DECLARE @TranCounter INT;
   SET @TranCounter = @@TRANCOUNT;
@@ -31,7 +18,6 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-<<<<<<< HEAD
   IF @saldo + (SELECT SALDO FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid) > 200
       RAISERROR (56020, 16, 1);
 
@@ -40,9 +26,6 @@ AS
     SALDO = @saldo + SALDO
   OUTPUT INSERTED.SALDO
   WHERE ACCOUNTID  = @accountid
-=======
-  -- ADD CODE
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
@@ -63,8 +46,5 @@ AS
     SELECT @ErrorState = ERROR_STATE();
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
-<<<<<<< HEAD
 
   EXECUTE sp_addmessage 56020, 16, 'Het saldo mag niet hoger 200 euro zijn!';
-=======
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27

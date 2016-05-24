@@ -24,22 +24,17 @@ AS
   BEGIN TRY
 
 --   IF (@naam LIKE '%[a-zA-z]%')
-<<<<<<< HEAD
 --   ELSE
-=======
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 --     RAISERROR (56100, 16, 1);
 
   IF (@geboortedatum) > (DATEADD(yy, -5, GETDATE()))
     RAISERROR (56101, 16, 1);
 
-<<<<<<< HEAD
   IF @emailadres NOT LIKE '%_@__%.__%'
     RAISERROR (56102, 16, 1);
 
   IF @telefoonnummer LIKE '%[a-zA-Z]%'
     RAISERROR (56103, 16, 1);
-=======
   IF (@geboortedatum) > (DATEADD(yy, -5, GETDATE()))
     RAISERROR (56102, 16, 1);
 
@@ -66,7 +61,6 @@ AS
 
   IF LEN(@telefoonnummer) > 15
     RAISERROR (561010, 16, 1);
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 
   UPDATE dbo.PERSOON
   SET
