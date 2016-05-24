@@ -19,7 +19,7 @@ AS
   BEGIN TRY
 
   IF @saldo + (SELECT SALDO FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid) > 200
-      RAISERROR (56020, 16, 1)
+      RAISERROR (56020, 16, 1);
 
   UPDATE dbo.ACCOUNT
   SET
