@@ -10,7 +10,7 @@ CREATE PROCEDURE PROC_CREATE_CARD -- EXAMPLE NAME
     @kaartnummer CHAR(16),
     @kaartnaam   VARCHAR(255),
     @vervaldatum DATETIME,
-    @persoon     UNIQUEIDENTIFIER
+    @persoon UNIQUEIDENTIFIER,
     @persoonid UNIQUEIDENTIFIER
 AS
   DECLARE @TranCounter INT;
@@ -22,10 +22,10 @@ AS
   BEGIN TRY
 
   IF LEN(@kaartnaam) > 26
-    RAISERROR (56210, 16, 1)
+    RAISERROR (56210, 16, 1);
 
   IF @vervaldatum < GETDATE()
-    RAISERROR (56211, 16, 1)
+    RAISERROR (56211, 16, 1);
 
   DECLARE @kaart UNIQUEIDENTIFIER;
   SET @kaart = NEWID();
