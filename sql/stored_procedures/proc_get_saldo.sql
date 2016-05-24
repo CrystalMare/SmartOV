@@ -25,6 +25,9 @@ AS
   IF @Saldo IS NULL
     RAISERROR(56001, 16, 1);
 
+  IF NOT EXISTS(SELECT 1 FROM dbo.ACCOUNT WHERE ACCOUNTID = @AccountID)
+      RAISERROR (56002, 16, 1);
+
   SELECT @Saldo;
 
   IF @TranCounter = 0
@@ -46,3 +49,7 @@ AS
     SELECT @ErrorState = ERROR_STATE();
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
+
+  EXECUTE sp_addmessage 56001, 16, 'Account bestaat niet';
+  EXECUTE sp_addmessage 56002, 16, 'Account bestaat niet';
+

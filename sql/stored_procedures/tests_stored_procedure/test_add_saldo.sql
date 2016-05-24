@@ -7,6 +7,7 @@ BEGIN TRANSACTION TestAddSaldo
 	EXECUTE dbo.PROC_ADD_SALDO @accountid = 'E6D77591-D3D9-4B2A-A855-8961A71DFEE7', @saldo = 201;
 
 	-- Geen valide insert op de tabel account, het account bestaat niet
-	EXECUTE dbo.PROC_ADD_SALDO @accountid = NEWID(), @saldo = 10;
+	DECLARE @newid UNIQUEIDENTIFIER = NEWID();
+	EXECUTE dbo.PROC_ADD_SALDO @accountid = @newid, @saldo = 10;
 
 ROLLBACK TRANSACTION TestAddSaldo

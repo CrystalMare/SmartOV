@@ -90,7 +90,7 @@ AS
   EXECUTE sp_addmessage 56221, 16, 'Als dit gebeurt wordt Sven crazy!';
   EXECUTE sp_addmessage 56222, 16, 'Je moet ouder zijn om 5 jaar om te registreren!';
   EXECUTE sp_addmessage 56223, 16, 'Geen valide email adress';
-  EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan in het telefoonnumer!', @replace = replace;
+  EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan in het telefoonnumer!', @replace = REPLACE;
   EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan!';
   EXECUTE sp_addmessage 56225, 16, 'Geen speciale tekens toegestaan in de postcode', @replace =  REPLACE;
   EXECUTE sp_addmessage 56226, 16, 'Geen speciale tekens toegestaan in het huisnummer', @replace =  REPLACE;
