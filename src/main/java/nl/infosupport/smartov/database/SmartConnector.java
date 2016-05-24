@@ -2,12 +2,14 @@ package nl.infosupport.smartov.database;
 
 import lombok.extern.log4j.Log4j;
 import nl.infosupport.smartov.database.dao.SmartOVDao;
+import nl.infosupport.smartov.database.model.Persoon;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -15,10 +17,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Log4j
-class SmartOVConnector extends SqlConnector implements SmartOVDao {
+class SmartConnector extends SqlConnector implements SmartOVDao {
 
     @Inject
-    SmartOVConnector(SqlDatasource connection) {
+    SmartConnector(SqlDatasource connection) {
         super(connection.getConnection());
     }
 
@@ -39,20 +41,32 @@ class SmartOVConnector extends SqlConnector implements SmartOVDao {
 
     @Override
     public BigDecimal addSaldo(UUID accountId, BigDecimal saldo) throws SmartOVException {
-        return null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_ADD_SALDO @accountid = ?, @saldo = ?;"
+            );
+            ps.setString(1, accountId.toString());
+            ps.setBigDecimal(2, saldo);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getBigDecimal(1);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override
     public UUID createCard(UUID persoonId, String kaartnaam) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_CREATE_CARD @kaartnummer = ?, @kaartnaam = ?, @vervaldatum = ?;"
+                    "EXECUTE smartov.dbo.PROC_CREATE_CARD @kaartnummer = ?, @kaartnaam = ?, @persoonId = ?;"
             );
             ps.setString(1, new Random().ints(16, 0, 9).mapToObj(Integer::toString).collect(Collectors.joining()));
             ps.setString(2, kaartnaam);
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.YEAR, 2);
-            ps.setDate(3, new java.sql.Date(calendar.getTime().getTime()));
+            //ps.setDate(3, new java.sql.Date(calendar.getTime().getTime()));
+            ps.setString(3, persoonId.toString());
             ResultSet rs = ps.executeQuery();
             rs.next();
             return UUID.fromString(rs.getString(1));
@@ -99,6 +113,22 @@ class SmartOVConnector extends SqlConnector implements SmartOVDao {
             ps.setString(6, email);
             ps.setString(7, personId.toString());
             ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public Persoon getPerson(UUID personId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_PERSON @PersoonID = ?;"
+            );
+            ps.setString(1, personId.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return new Persoon(personId, rs.getString("NAAM"), rs.getString("POSTCODE"), rs.getString("HUISNUMMER"),
+                    rs.getDate("GEBOORTEDATUM"), rs.getString("TELEFOONNUMMER"), rs.getString("E_MAILADRES"));
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }

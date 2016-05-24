@@ -1,6 +1,7 @@
 package nl.infosupport.smartov.database;
 
 import nl.infosupport.smartov.database.dao.SmartOVDao;
+import nl.infosupport.smartov.database.model.Persoon;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,6 +29,11 @@ class SmartOVDummy implements SmartOVDao {
     public void updatePerson(UUID personId, String naam, String postcode, String huisnummer, Date geboortedatum,
                              String telefoonummer, String email) throws SmartOVException {
 
+    }
+
+    @Override
+    public Persoon getPerson(UUID personId) throws SmartOVException {
+        return null;
     }
 
     @Override

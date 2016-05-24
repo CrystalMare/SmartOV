@@ -8,9 +8,14 @@ GO
 -- CREATE STORED PROCEDURE
 CREATE PROCEDURE PROC_CREATE_CARD -- EXAMPLE NAME
     @kaartnummer CHAR(16),
+<<<<<<< HEAD
     @kaartnaam   VARCHAR(255),
     @vervaldatum DATETIME,
     @persoon     UNIQUEIDENTIFIER
+=======
+    @kaartnaam VARCHAR(255),
+    @persoonid UNIQUEIDENTIFIER
+>>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 AS
   DECLARE @TranCounter INT;
   SET @TranCounter = @@TRANCOUNT;
@@ -23,21 +28,31 @@ AS
   IF LEN(@kaartnaam) > 26
     RAISERROR (56210, 16, 1)
 
+<<<<<<< HEAD
   IF @vervaldatum < GETDATE()
     RAISERROR (56211, 16, 1)
 
   DECLARE @kaart UNIQUEIDENTIFIER;
   SET @kaart = NEWID();
+=======
+  DECLARE @kaartid UNIQUEIDENTIFIER = NEWID()
+>>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 
   INSERT INTO dbo.KAART (KAARTID, KAARTNUMMER, KAARTNAAM, VERVALDATUM, KOPPELDATUM)
+      OUTPUT INSERTED.KAARTID
   VALUES (
+<<<<<<< HEAD
     @kaart,
+=======
+    @kaartid,
+>>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
     @kaartnummer,
     @kaartnaam,
-    @vervaldatum,
+    DATEADD(yy, 5, GETDATE()),
     GETDATE()
   )
 
+<<<<<<< HEAD
   INSERT INTO dbo.PERSOONLIJKE_KAART (KAARTID, PERSOONID)
   VALUES (
     @kaart,
@@ -45,6 +60,14 @@ AS
   );
 
   SELECT @kaart;
+=======
+  INSERT INTO dbo.PERSOONLIJKE_KAART(KAARTID, PERSOONID)
+      OUTPUT INSERTED.KAARTID
+  VALUES (
+    @kaartid,
+    @persoonid
+  )
+>>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;

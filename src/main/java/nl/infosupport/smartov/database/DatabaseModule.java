@@ -10,7 +10,7 @@ final class DatabaseModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SqlDatasource.class).to(SqlDatabase.class);
-        bind(SmartOVDao.class).to(SmartOVConnector.class);
+        bind(SmartOVDao.class).to(SmartConnector.class);
     }
 
     @Provides
