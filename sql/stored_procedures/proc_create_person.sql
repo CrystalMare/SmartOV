@@ -22,13 +22,6 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-<<<<<<< HEAD
---   IF (@naam LIKE '%[^a-zA-Z0-9]%')
-=======
---   IF (@naam NOT LIKE '%[a-zA-z]%')
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
---     RAISERROR (56220, 16, 1);
-
   DECLARE @persoonid UNIQUEIDENTIFIER = NEWID();
 
   IF EXISTS (SELECT 1 FROM dbo.PERSOON WHERE PERSOONID = @persoonid)
@@ -40,11 +33,7 @@ AS
   IF @emailadres NOT LIKE '%_@__%.__%'
       RAISERROR (56223, 16, 1);
 
-<<<<<<< HEAD
-  IF @telefoonnummer LIKE '%[a-zA-Z]%'
-=======
   IF (@telefoonnummer LIKE '%[a-zA-Z]%')
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
       RAISERROR (56224, 16, 1);
 
   IF (@postcode LIKE '%[^a-zA-Z0-9]%')
@@ -101,9 +90,7 @@ AS
   EXECUTE sp_addmessage 56221, 16, 'Als dit gebeurt wordt Sven crazy!';
   EXECUTE sp_addmessage 56222, 16, 'Je moet ouder zijn om 5 jaar om te registreren!';
   EXECUTE sp_addmessage 56223, 16, 'Geen valide email adress';
-<<<<<<< HEAD
   EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan in het telefoonnumer!', @replace = replace;
-=======
   EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan!';
   EXECUTE sp_addmessage 56225, 16, 'Geen speciale tekens toegestaan in de postcode', @replace =  REPLACE;
   EXECUTE sp_addmessage 56226, 16, 'Geen speciale tekens toegestaan in het huisnummer', @replace =  REPLACE;
@@ -111,4 +98,3 @@ AS
   EXECUTE sp_addmessage 56228, 16, 'Geen valide datum!';
   EXECUTE sp_addmessage 56229, 16, 'Telefoonnummer mag niet korter dan 8 tekens zijn';
   EXECUTE sp_addmessage 562210, 16, 'Telefoonnummer mag niet langer dan 15 tekens zijn';
->>>>>>> 376a679f61e1cc3391e0e20fcc95590d2fffdf27
