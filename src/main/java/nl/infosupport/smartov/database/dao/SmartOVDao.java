@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Provides easy access to the datastructure "SmartOV"
  */
-public interface SmartOVDao extends CloseableDao {
+public interface SmartOVDao extends CloseableDao, Transactional {
 
     /**
      * Gets the saldo of a given account
@@ -294,5 +294,13 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureName("PROC_GET_PERSON")
     Persoon getPerson(UUID personId) throws SmartOVException;
 
-
+    /**
+     * Creates a new account
+     *
+     * @param personId the person who manages the account
+     * @return the id of the new account
+     */
+    @ProcedureId(24)
+    @ProcedureName("PROC_CREATE_ACCOUNT")
+    UUID createAccount(UUID personId);
 }

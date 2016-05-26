@@ -210,4 +210,9 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             throw new SmartOVException(e);
         }
     }
+
+    @Override
+    public UUID createAccount(UUID personId) {
+        throw new RuntimeException("Method not implemented!");
+    }
 }
