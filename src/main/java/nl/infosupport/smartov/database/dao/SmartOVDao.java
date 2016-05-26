@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Provides easy access to the datastructure "SmartOV"
  */
-public interface SmartOVDao extends CloseableDao, Transactional {
+public interface SmartOVDao extends CloseableDao {
 
     /**
      * Gets the saldo of a given account
