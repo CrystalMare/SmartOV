@@ -19,14 +19,14 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-  IF NOT EXISTS(  SELECT 1
-                  FROM dbo.PERSOON
-                  Where PERSOONID = @PersoonID)
-      RAISERROR(56140,16,1);
+  IF NOT EXISTS(SELECT 1
+                FROM dbo.PERSOON
+                WHERE PERSOONID = @PersoonID)
+    RAISERROR (56140, 16, 1);
 
-  SELECT kaartID
+  SELECT KAARTID
   FROM dbo.PERSOONLIJKE_KAART
-  Where PERSOONID = @PersoonID
+  WHERE PERSOONID = @PersoonID
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
