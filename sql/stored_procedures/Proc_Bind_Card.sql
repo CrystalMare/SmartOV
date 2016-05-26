@@ -1,10 +1,13 @@
+-- PROC_BIND_CARD
 USE smartOV
 GO
 
+-- DELETE IF PROC ALREADY EXISTS
 IF OBJECT_ID('PROC_BIND_CARD', 'P') IS NOT NULL
   DROP PROCEDURE PROC_BIND_CARD
 GO
 
+-- ERROR MESSAGES
 EXECUTE sp_addmessage 56060,16, 'Het opgegeven account bestaat niet.', @Replace=replace;
 EXECUTE sp_addmessage 56061,16, 'De opgegeven kaart bestaat niet.', @Replace=replace;
 EXECUTE sp_addmessage 56062,16, 'De opgegeven kaart is reeds gekoppeld aan een saldobeheerder.', @Replace=replace;
