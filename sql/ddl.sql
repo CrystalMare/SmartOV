@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2012                    */
-/* Created on:     26-5-2016 11:41:51                           */
+/* Created on:     26-5-2016 16:30:11                           */
 /*==============================================================*/
 
 
@@ -470,10 +470,12 @@ go
 /* Table: PRODUCT_OP_KAART                                      */
 /*==============================================================*/
 create table PRODUCT_OP_KAART (
+   PRODUCTOPKAARTID     SURROGATEKEY         not null,
    KAARTID              SURROGATEKEY         not null,
    REISPRODUCTID        SURROGATEKEY         not null,
    KOPPELDATUM          DATUM                not null,
-   constraint PK_PRODUCT_OP_KAART primary key nonclustered (KAARTID, REISPRODUCTID)
+   constraint PK_PRODUCT_OP_KAART primary key (PRODUCTOPKAARTID),
+   constraint AK_UNIQUE_PRODUCT_OP__PRODUCT_ unique (KAARTID, REISPRODUCTID)
 )
 go
 
