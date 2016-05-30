@@ -118,10 +118,10 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             );
             ps.setString(1, cardId.toString());
             ResultSet rs = ps.executeQuery();
-            List<Reisproduct> list = new ArrayList<>();
+            List<Kortingsreisproduct> list = new ArrayList<>();
             while (rs.next()){
                 list.add(new Kortingsreisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
-                        rs.getDate("Vervaldatum"), rs.getInt("KORTING")));
+                        rs.getInt("GELDIGHEID"), rs.getInt("KORTING")));
             }
             return list;
         } catch (SQLException e) {

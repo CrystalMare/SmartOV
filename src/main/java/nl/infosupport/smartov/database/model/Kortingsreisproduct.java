@@ -1,14 +1,16 @@
 package nl.infosupport.smartov.database.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.UUID;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class Kortingsreisproduct extends Reisproduct {
-    int korting;
+    private int korting;
+
+    @Builder
+    public Kortingsreisproduct(UUID reisproductId, String naam, int geldigheid, int korting) {
+        super(reisproductId, naam, geldigheid);
+        this.korting = korting;
+    }
 }
