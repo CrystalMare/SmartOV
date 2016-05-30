@@ -1,10 +1,12 @@
 package nl.infosupport.smartov.database.dao;
 
 import nl.infosupport.smartov.database.SmartOVException;
-import nl.infosupport.smartov.database.model.Persoon;
+import nl.infosupport.smartov.database.model.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,6 +21,8 @@ public interface SmartOVDao extends CloseableDao {
      * @return the saldo of the account
      * @throws SmartOVException if the account doesnt exist
      */
+    @ProcedureId(1)
+    @ProcedureName("PROC_GET_SALDO")
     BigDecimal getSaldo(UUID accountId) throws SmartOVException;
 
     /**
@@ -29,7 +33,224 @@ public interface SmartOVDao extends CloseableDao {
      * @return the new saldo
      * @throws SmartOVException if the account doesnt exist or if the total saldo exceeds 200
      */
+    @ProcedureId(2)
+    @ProcedureName("PROC_ADD_SALDO")
     BigDecimal addSaldo(UUID accountId, BigDecimal saldo) throws SmartOVException;
+
+    /**
+     * Enables auto-renewal for an account
+     *
+     * @param acocuntId      the account
+     * @param rekeningNummer the bankaccount to widthdraw money from
+     * @param from           the ammount of money that triggers the autorenewal
+     * @param ammount        the ammount of money to add
+     * @throws SmartOVException if the account doesnt exist, or already has auto-renewal enabled.
+     */
+    @ProcedureId(3)
+    @ProcedureName("PROC_SET_AUTO_RENEWAL")
+    void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigInteger from, BigInteger ammount)
+            throws SmartOVException;
+
+    /**
+     * Disables auto-renewal for an account
+     *
+     * @param accountId the account
+     * @throws SmartOVException if the account doesn't exist or doesn't have auto-renewal enabled.
+     */
+    @ProcedureId(4)
+    @ProcedureName("PROC_DISABLE_AUTO_RENEWAL")
+    void disableAutoRenewal(UUID accountId) throws SmartOVException;
+
+    /**
+     * Gets all the cards that are bound to an account
+     *
+     * @param accountId the account
+     * @return a list of all bound cards
+     * @throws SmartOVException if the account doesn't exist.
+     */
+    @ProcedureId(5)
+    @ProcedureName("PROC_GET_CARDS_BY_ACCOUNT")
+    List<Kaart> getCardsByAccount(UUID accountId) throws SmartOVException;
+
+    /**
+     * Binds a card to an account
+     *
+     * @param cardId    the card to bind
+     * @param accountId the account to bind to
+     * @throws SmartOVException if the card is already bound or doesn't exist.
+     */
+    @ProcedureId(6)
+    @ProcedureName("PROC_BIND_CARD")
+    void bindCard(UUID cardId, UUID accountId) throws SmartOVException;
+
+    /**
+     * Unbinds a card from an account
+     *
+     * @param cardId the card to unbind
+     * @throws SmartOVException if card was not bound or card doesn't exist
+     */
+    @ProcedureId(7)
+    @ProcedureName("PROC_UNBIND_CARD")
+    void unbindCard(UUID cardId) throws SmartOVException;
+
+    /**
+     * Gets all the products on a card
+     *
+     * @param cardId the card to check for
+     * @return all the products on the card
+     * @throws SmartOVException if the card doesn't exist.
+     */
+    @ProcedureId(8)
+    @ProcedureName("PROC_GET_PRODUCTS")
+    List<Reisproduct> getProducts(UUID cardId) throws SmartOVException;
+
+    /**
+     * Moves a product to a different card
+     *
+     * @param productId the product id
+     * @param cardId    the card target
+     * @throws SmartOVException if the card or product doesn't exist, or if current card of the product is not bound to
+     *                          the same account.
+     */
+    @ProcedureId(9)
+    @ProcedureName("PROC_MOVE_PRODUCT")
+    void moveProduct(UUID productId, UUID cardId) throws SmartOVException;
+
+    /**
+     * Updates a person
+     *
+     * @param personId      the id of the person
+     * @param naam          the name of the person, max 26
+     * @param postcode      the zipcode, max 10 characters
+     * @param huisnummer    the number of the house, max 10 characters
+     * @param geboortedatum the date of birth, at least 5 years old
+     * @param telefoonummer the phonenumber, max 15 characters (E.164)
+     * @param email         the mailaddress, max 255 characters
+     * @throws SmartOVException if any of the fields is empty or isnt conform with the constraints.
+     *                          Or the given personid was not found.
+     */
+    @ProcedureId(10)
+    @ProcedureName("PROC_UPDATE_PERSON")
+    void updatePerson(UUID personId, String naam, String postcode, String huisnummer, Date geboortedatum,
+                      String telefoonummer, String email) throws SmartOVException;
+
+    /**
+     * Gets the costs made on a specific account
+     *
+     * @param accountId the account
+     * @param from      the from filter
+     * @param till      the till filter
+     * @return a list of costs made during a specific period with an account
+     * @throws SmartOVException if the account doesn't exist
+     * @deprecated the API for costs is not stable yet, this method will probably change
+     */
+    @ProcedureId(11)
+    @ProcedureName("PROC_GET_COSTS")
+    @Deprecated
+    BigInteger getCosts(UUID accountId, Date from, Date till) throws SmartOVException;
+
+    /**
+     * Gets all the costs a specific card made for a specific account during a period
+     *
+     * @param accountId the account
+     * @param cardId    the card
+     * @param from      the from filter
+     * @param till      the till filter
+     * @return a list of costs
+     * @throws SmartOVException if the card or account doesn't exist.
+     * @deprecated the API for costs is not stable yet, this method will probably change
+     */
+    @ProcedureId(12)
+    @ProcedureName("PROC_GET_COSTS_FOR_CARD")
+    @Deprecated
+    BigInteger getCostsForCard(UUID accountId, UUID cardId, Date from, Date till) throws SmartOVException;
+
+    /**
+     * Gets the journeys that were made with an account during a specific period
+     *
+     * @param accountId the account
+     * @param from      the from filter
+     * @param till      the till filter
+     * @return a list of journeys
+     * @throws SmartOVException if the account doesn't exist.
+     * @deprecated the API for costs is not stable yet, this method will probably change
+     */
+    @ProcedureId(13)
+    @ProcedureName("PROC_GET_JOURNEYS")
+    @Deprecated
+    List<Reis> getJourneys(UUID accountId, Date from, Date till) throws SmartOVException;
+
+    /**
+     * Gets all the cards by their owner
+     *
+     * @param cardOwner the owner
+     * @return a list of all owned cards
+     * @throws SmartOVException if the owner doesn't exist
+     */
+    @ProcedureId(14)
+    @ProcedureName("PROC_GET_CARDS_BY_OWNER")
+    List<Kaart> getCardsByOwner(UUID cardOwner) throws SmartOVException;
+
+    /*
+        Procedure 15
+        PROC_CREATE_PRODUCT
+        https://icaconfluence.atlassian.net/browse/OG-166
+     */
+
+    /**
+     * Deducts the ammount of money from the account
+     *
+     * @param accountId the account
+     * @param ammount   the ammount
+     * @return the updated ammount of money on the account
+     * @throws SmartOVException if the account doesnt exist or the account doesn't have enough balance.
+     */
+    @ProcedureId(16)
+    @ProcedureName("PROC_DEDUCT_MONEY")
+    BigInteger deductMoney(UUID accountId, BigInteger ammount) throws SmartOVException;
+
+    /**
+     * Requests a replacement card
+     *
+     * @param cardId the card id
+     * @param reason the reason
+     * @throws SmartOVException if the card doesn't exist or the reason isn't valid
+     */
+    @ProcedureId(17)
+    @ProcedureName("PROC_REQUEST_NEW_CARD")
+    void requestNewCard(UUID cardId, Reden reason) throws SmartOVException;
+
+    /**
+     * Deletes a card
+     *
+     * @param cardId the card id
+     * @throws SmartOVException if the card doesn't exist
+     */
+    @ProcedureId(18)
+    @ProcedureName("PROC_DELETE_CARD")
+    void deleteCard(UUID cardId) throws SmartOVException;
+
+    /**
+     * Starts a journey with a card
+     *
+     * @param cardId    the card
+     * @param stationId the station the journey starts
+     * @throws SmartOVException if the card or station doesn't exist. Or if the ballance is not enough.
+     */
+    @ProcedureId(19)
+    @ProcedureName("PROC_START_TRAVEL")
+    void startTravel(UUID cardId, UUID stationId) throws SmartOVException;
+
+    /**
+     * Ends a journey with a card
+     *
+     * @param cardId    the cardid
+     * @param stationId the station
+     * @throws SmartOVException if the card or station doesn't exist.
+     */
+    @ProcedureId(20)
+    @ProcedureName("PROC_END_TRAVEL")
+    void endTravel(UUID cardId, UUID stationId) throws SmartOVException;
 
     /**
      * <p>
@@ -42,6 +263,8 @@ public interface SmartOVDao extends CloseableDao {
      * @return the id of the card that was created
      * @throws SmartOVException if the name is null or exceeds 26 characters or if no person with the personid was found
      */
+    @ProcedureId(21)
+    @ProcedureName("PROC_CREATE_CARD")
     UUID createCard(UUID persoonId, String kaartnaam) throws SmartOVException;
 
     /**
@@ -56,24 +279,10 @@ public interface SmartOVDao extends CloseableDao {
      * @return the id of the person created
      * @throws SmartOVException if any of the fields is empty or isnt conform with the constraints set on the fields.
      */
+    @ProcedureId(22)
+    @ProcedureName("PROC_CREATE_PERSON")
     UUID createPerson(String naam, String postcode, String huisnummer, Date geboortedatum, String telefoonummer,
                       String email) throws SmartOVException;
-
-    /**
-     * Updates a person
-     *
-     * @param personId      the id of the person
-     * @param naam          the name of the person, max 26
-     * @param postcode      the zipcode, max 10 characters
-     * @param huisnummer    the number of the house, max 10 characters
-     * @param geboortedatum the date of birth, at least 5 years old
-     * @param telefoonummer the phonenumber, max 15 characters (E.164)
-     * @param email         the mailaddress, max 255 characters
-     * @throws SmartOVException if any of the fields is empty or isnt conform with the constraints. O
-     *                          Or the given personid was not found.
-     */
-    void updatePerson(UUID personId, String naam, String postcode, String huisnummer, Date geboortedatum,
-                      String telefoonummer, String email) throws SmartOVException;
 
     /**
      * Gets a person from the ID
@@ -81,6 +290,8 @@ public interface SmartOVDao extends CloseableDao {
      * @param personId the id
      * @return the person
      */
+    @ProcedureId(23)
+    @ProcedureName("PROC_GET_PERSON")
     Persoon getPerson(UUID personId) throws SmartOVException;
 
 
