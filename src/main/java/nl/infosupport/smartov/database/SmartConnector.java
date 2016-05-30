@@ -66,7 +66,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public List<Kaart> getCardsByAccount(UUID accountId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @accoundid = ?"
+                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @accountid = ?"
             );
             ps.setString(1, accountId.toString());
             ResultSet rs = ps.executeQuery();
@@ -106,18 +106,41 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             ps.setString(1, cardId.toString());
             ps.execute();
         } catch (SQLException e){
-            throw new SmartOVException(e)
+            throw new SmartOVException(e);
         }
     }
 
     @Override
-    public List<Reisproduct> getProducts(UUID cardId) throws SmartOVException {
-        return null;
+    public List<Kortingsreisproduct> getProducts(UUID cardId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_PRODUCTS @kaartid = ?"
+            );
+            ps.setString(1, cardId.toString());
+            ResultSet rs = ps.executeQuery();
+            List<Reisproduct> list = new ArrayList<>();
+            while (rs.next()){
+                list.add(new Kortingsreisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
+                        rs.getDate("Vervaldatum"), rs.getInt("KORTING")));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override
     public void moveProduct(UUID productId, UUID cardId) throws SmartOVException {
-
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_MOVE_PRODUCT @productid = ?, @kaartid = ?"
+            );
+            ps.setString(1, productId.toString());
+            ps.setString(2, cardId.toString());
+            ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override

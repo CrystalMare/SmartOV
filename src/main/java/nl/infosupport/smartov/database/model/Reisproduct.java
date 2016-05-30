@@ -13,6 +13,5 @@ import java.util.UUID;
 public abstract class Reisproduct {
     UUID reisproductId;
     String naam;
-    Date koppelDatum;
-    Date vervalDatum;
+    int geldigheid;
 }
