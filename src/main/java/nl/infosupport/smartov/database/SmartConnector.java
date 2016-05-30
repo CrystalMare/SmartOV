@@ -66,7 +66,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public List<Kaart> getCardsByAccount(UUID accountId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @accoundid = ?"
+                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @accountid = ?"
             );
             ps.setString(1, accountId.toString());
             ResultSet rs = ps.executeQuery();
@@ -112,21 +112,20 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
 
     @Override
     public List<Reisproduct> getProducts(UUID cardId) throws SmartOVException {
-        return null;
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(
-//                    "EXECUTE smartov.dbo.PROC_GET_PRODUCTS @kaartid = ?"
-//            );
-//            ps.setString(1, cardId.toString());
-//            ResultSet rs = ps.executeQuery();
-//            List<Reisproduct> list = new ArrayList<>();
-//            while (rs.next()){
-//                list.add(new Reisproduct("", rs.getString("NAAM"), rs.getString(""), ));
-//            }
-//            return list;
-//        } catch (SQLException e) {
-//            throw new SmartOVException(e);
-//        }
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_PRODUCTS @kaartid = ?"
+            );
+            ps.setString(1, cardId.toString());
+            ResultSet rs = ps.executeQuery();
+            List<Reisproduct> list = new ArrayList<>();
+            while (rs.next()){
+                list.add(new Reisproduct(rs.getString("REISPRODUCTID"), rs.getString("NAAM"), rs.getString("GELDIGHEID")));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override
