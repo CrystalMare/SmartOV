@@ -2,18 +2,15 @@ package nl.infosupport.smartov.database;
 
 import lombok.extern.log4j.Log4j;
 import nl.infosupport.smartov.database.dao.SmartOVDao;
-import nl.infosupport.smartov.database.model.Persoon;
+import nl.infosupport.smartov.database.model.*;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j
@@ -53,6 +50,74 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }
+    }
+
+    @Override
+    public void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigInteger from, BigInteger ammount) throws SmartOVException {
+
+    }
+
+    @Override
+    public void disableAutoRenewal(UUID accountId) throws SmartOVException {
+
+    }
+
+    @Override
+    public List<Kaart> getCardsByAccount(UUID accountId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @accoundid = ?"
+            );
+            ps.setString(1, accountId.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            List<Kaart> list = new ArrayList<>();
+            while (rs.next()){
+                list.add(new Kaart(UUID.fromString(rs.getString("KAARTID")), accountId, rs.getString("KAARTNUMMER"),
+                        rs.getString("KAARTNAAM"), rs.getDate("VERVALDATUM"), rs.getDate("KOPPELDATUM")));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public void bindCard(UUID cardId, UUID accountId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_BIND_CARD @kaartid = ?, @accountid = ?"
+            );
+            ps.setString(1, cardId.toString());
+            ps.setString(2, accountId.toString());
+            ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+
+    }
+
+    @Override
+    public void unbindCard(UUID cardId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_UNBIND_CARD @kaartid = ?"
+            );
+            ps.setString(1, cardId.toString());
+            ps.execute();
+        } catch (SQLException e){
+            throw new SmartOVException(e)
+        }
+    }
+
+    @Override
+    public List<Reisproduct> getProducts(UUID cardId) throws SmartOVException {
+        return null;
+    }
+
+    @Override
+    public void moveProduct(UUID productId, UUID cardId) throws SmartOVException {
+
     }
 
     @Override
@@ -116,6 +181,51 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }
+    }
+
+    @Override
+    public BigInteger getCosts(UUID accountId, Date from, Date till) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public BigInteger getCostsForCard(UUID accountId, UUID cardId, Date from, Date till) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public List<Reis> getJourneys(UUID accountId, Date from, Date till) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public List<Kaart> getCardsByOwner(UUID cardOwner) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public BigInteger deductMoney(UUID accountId, BigInteger ammount) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public void requestNewCard(UUID cardId, Reden reason) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public void deleteCard(UUID cardId) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public void startTravel(UUID cardId, UUID stationId) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
+    }
+
+    @Override
+    public void endTravel(UUID cardId, UUID stationId) throws SmartOVException {
+        throw new RuntimeException("Method not implemented!");
     }
 
     @Override
