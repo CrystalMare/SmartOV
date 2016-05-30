@@ -111,16 +111,17 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public List<Reisproduct> getProducts(UUID cardId) throws SmartOVException {
+    public List<Kortingsreisproduct> getProducts(UUID cardId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "EXECUTE smartov.dbo.PROC_GET_PRODUCTS @kaartid = ?"
             );
             ps.setString(1, cardId.toString());
             ResultSet rs = ps.executeQuery();
-            List<Reisproduct> list = new ArrayList<>();
+            List<Kortingsreisproduct> list = new ArrayList<>();
             while (rs.next()){
-                list.add(new Reisproduct(rs.getString("REISPRODUCTID"), rs.getString("NAAM"), rs.getString("GELDIGHEID")));
+                list.add(new Kortingsreisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
+                        rs.getInt("GELDIGHEID"), rs.getInt("KORTING")));
             }
             return list;
         } catch (SQLException e) {
