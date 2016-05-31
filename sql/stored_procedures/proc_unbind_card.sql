@@ -1,0 +1,52 @@
+USE smartov
+GO
+
+IF OBJECT_ID('PROC_UNBIND_CARD', 'P') IS NOT NULL
+  DROP PROCEDURE PROC_UNBIND_CARD
+GO
+
+-- CREATE STORED PROCEDURE
+CREATE PROCEDURE PROC_UNBIND_CARD
+    @cardid UNIQUEIDENTIFIER,
+    @accountid UNIQUEIDENTIFIER
+AS
+  DECLARE @TranCounter INT;
+  SET @TranCounter = @@TRANCOUNT;
+  IF @TranCounter > 0
+    SAVE TRANSACTION ProcedureSave;
+  ELSE
+    BEGIN TRANSACTION;
+  BEGIN TRY
+
+  IF NOT EXISTS (SELECT 1 FROM KAART WHERE ACCOUNTID = @cardid)
+    RAISERROR (56071, 16, 1)
+
+  UPDATE KAART
+  SET ACCOUNTID = NULL
+  WHERE KAARTNUMMER = @cardid
+
+  IF @TranCounter = 0
+    COMMIT TRANSACTION;
+
+  END TRY
+  BEGIN CATCH
+    IF @TranCounter = 0
+      ROLLBACK TRANSACTION;
+    ELSE
+      IF XACT_STATE() <> -1
+        ROLLBACK TRANSACTION ProcedureSave;
+
+    DECLARE @ErrorMessage NVARCHAR(4000);
+    DECLARE @ErrorSeverity INT;
+    DECLARE @ErrorState INT;
+    SELECT @ErrorMessage = ERROR_MESSAGE();
+    SELECT @ErrorSeverity = ERROR_SEVERITY();
+    SELECT @ErrorState = ERROR_STATE();
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+  END CATCH
+
+  EXECUTE sp_addmessage 56071, 16, 'Het account bestaat niet.';
+
+  BEGIN TRAN TEST
+    EXEC PROC_UNBIND_CARD @cardid = '', @accountid = ''
+  ROLLBACK TRAN TEST
