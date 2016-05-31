@@ -73,6 +73,17 @@ public interface SmartOVDao extends CloseableDao {
     List<UUID> getCardsByAccount(UUID accountId) throws SmartOVException;
 
     /**
+     * Gets all the cards that are bound to an account
+     *
+     * @param accountId the account
+     * @return a list of all bound cards
+     * @throws SmartOVException if the account doesn't exist.
+     */
+    @ProcedureId(5)
+    @ProcedureName("PROC_GET_CARDS_BY_ACCOUNT")
+    List<Kaart> getCardsByAccountDetailed(UUID accountId) throws SmartOVException;
+
+    /**
      * Binds a card to an account
      *
      * @param cardId    the card to bind
