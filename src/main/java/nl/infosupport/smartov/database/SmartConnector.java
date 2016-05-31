@@ -326,7 +326,8 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
 
     private static Kaart renderCard(ResultSet rs) throws SQLException {
         UUID kaartId = UUID.fromString(rs.getString("KAARTID"));
-        UUID accId = UUID.fromString(rs.getString("ACCOUNTID"));
+        String uuidString = rs.getString("ACCOUNTID");
+        UUID accId = (uuidString == null) ? null : UUID.fromString(uuidString);
         String kaartNummer = rs.getString("KAARTNUMMER");
         String kaartNaam = rs.getString("KAARTNAAM");
         Date vervaldatum = rs.getDate("VERVALDATUM");
