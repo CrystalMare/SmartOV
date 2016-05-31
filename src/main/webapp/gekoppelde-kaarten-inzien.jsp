@@ -22,8 +22,8 @@
             </div>
             <c:forEach items="${kaart}" var="kaart">
                 <div class="overview-item">
-                    <span class="overview-label"><c:out value="${kaart.kaartnummer}"/></span>
-                    <span class="overview-label"><c:out value="${kaart.kaartnaam}"/></span>
+                    <span class="overview-label"><c:out value="${kaart.kaartNummer}"/></span>
+                    <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
                     <span class="overview-label">&nbsp;</span>
                     <span class="overview-label">&nbsp;</span>
                     <span class="overview-label">&nbsp;</span>
