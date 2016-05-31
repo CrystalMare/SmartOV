@@ -315,4 +315,16 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureId(24)
     @ProcedureName("PROC_CREATE_ACCOUNT")
     UUID createAccount(UUID personId) throws SmartOVException;
+
+    /**
+     * Gets a card by its cardnumber
+     *
+     * @param cardnumber the cardnumber
+     * @return the card
+     * @throws SmartOVException if the card doesnt exist
+     */
+    @ProcedureId(26)
+    @ProcedureName("PROC_GET_CARD_BY_CARDNUMBER")
+    Kaart getCardByCardnumber(String cardnumber) throws SmartOVException;
+
 }

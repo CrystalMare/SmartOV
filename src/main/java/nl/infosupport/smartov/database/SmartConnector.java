@@ -92,19 +92,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             rs.next();
             List<Kaart> list = new ArrayList<>();
             while (rs.next()) {
-                UUID kaartId = UUID.fromString(rs.getString("KAARTID"));
-                UUID accId = UUID.fromString(rs.getString("ACCOUNTID"));
-                String kaartNummer = rs.getString("KAARTNUMMER");
-                String kaartNaam = rs.getString("KAARTNAAM");
-                Date vervaldatum = rs.getDate("VERVALDATUM");
-                Date koppeldatum = rs.getDate("KOPPELDATUM");
-
-                if (rs.getString("PERSOONID") != null) {
-                    list.add(new PersoonlijkeKaart(kaartId, accId, kaartNummer, kaartNaam, vervaldatum, koppeldatum,
-                            UUID.fromString(rs.getString("PERSOONID"))));
-                } else {
-                    list.add(new Kaart(kaartId, accId, kaartNummer, kaartNaam, vervaldatum, koppeldatum));
-                }
+                list.add(renderCard(rs));
             }
             return list;
         } catch (SQLException e) {
@@ -318,6 +306,37 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             return UUID.fromString(rs.getString(1));
         } catch (SQLException e) {
             throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public Kaart getCardByCardnumber(String cardnumber) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_CARD_BY_CARDNUMBER @cardnumber = ?, @detailed = 1;"
+            );
+            ps.setString(1, cardnumber);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return renderCard(rs);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    private static Kaart renderCard(ResultSet rs) throws SQLException {
+        UUID kaartId = UUID.fromString(rs.getString("KAARTID"));
+        UUID accId = UUID.fromString(rs.getString("ACCOUNTID"));
+        String kaartNummer = rs.getString("KAARTNUMMER");
+        String kaartNaam = rs.getString("KAARTNAAM");
+        Date vervaldatum = rs.getDate("VERVALDATUM");
+        Date koppeldatum = rs.getDate("KOPPELDATUM");
+
+        if (rs.getString("PERSOONID") != null) {
+            return new PersoonlijkeKaart(kaartId, accId, kaartNummer, kaartNaam, vervaldatum, koppeldatum,
+                    UUID.fromString(rs.getString("PERSOONID")));
+        } else {
+            return new Kaart(kaartId, accId, kaartNummer, kaartNaam, vervaldatum, koppeldatum);
         }
     }
 }
