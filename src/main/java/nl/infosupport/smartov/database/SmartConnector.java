@@ -66,14 +66,45 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public List<UUID> getCardsByAccount(UUID accountId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @PersoonID = ?"
+                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_ACCOUNT @AccountID = ?;"
             );
             ps.setString(1, accountId.toString());
             ResultSet rs = ps.executeQuery();
             rs.next();
             List<UUID> list = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(UUID.fromString(rs.getString(1)));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public List<Kaart> getCardsByAccountDetailed(UUID accountId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_ACCOUNT @AccountID = ?, @Detailed = 1;"
+            );
+            ps.setString(1, accountId.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            List<Kaart> list = new ArrayList<>();
+            while (rs.next()) {
+                UUID kaartId = UUID.fromString(rs.getString("KAARTID"));
+                UUID accId = UUID.fromString(rs.getString("ACCOUNTID"));
+                String kaartNummer = rs.getString("KAARTNUMMER");
+                String kaartNaam = rs.getString("KAARTNAAM");
+                Date vervaldatum = rs.getDate("VERVALDATUM");
+                Date koppeldatum = rs.getDate("KOPPELDATUM");
+
+                if (rs.getString("PERSOONID") != null) {
+                    list.add(new PersoonlijkeKaart(kaartId, accId, kaartNummer, kaartNaam, vervaldatum, koppeldatum,
+                            UUID.fromString(rs.getString("PERSOONID"))));
+                } else {
+                    list.add(new Kaart(kaartId, accId, kaartNummer, kaartNaam, vervaldatum, koppeldatum));
+                }
             }
             return list;
         } catch (SQLException e) {
@@ -103,7 +134,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             );
             ps.setString(1, cardId.toString());
             ps.execute();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new SmartOVException(e);
         }
     }
@@ -117,7 +148,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             ps.setString(1, cardId.toString());
             ResultSet rs = ps.executeQuery();
             List<Reisproduct> list = new ArrayList<>();
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(new Kortingsreisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
                         rs.getInt("GELDIGHEID"), rs.getInt("KORTING")));
             }
@@ -225,7 +256,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             ps.setString(1, cardOwner.toString());
             ResultSet rs = ps.executeQuery();
             List<UUID> cards = new ArrayList<>();
-            while(rs.next()) {
+            while (rs.next()) {
                 cards.add(UUID.fromString(rs.getString("KAARTID")));
             }
             return cards;
