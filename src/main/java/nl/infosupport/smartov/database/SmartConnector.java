@@ -86,7 +86,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public void bindCard(UUID cardId, UUID accountId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_BIND_CARD @kaartid = ?, @accountid = ?"
+                    "EXECUTE smartov.dbo.PROC_BIND_CARD @kaart = ?, @account = ?;"
             );
             ps.setString(1, cardId.toString());
             ps.setString(2, accountId.toString());
