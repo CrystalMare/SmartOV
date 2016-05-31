@@ -63,35 +63,19 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public List<Kaart> getCardsByAccount(UUID accountId) throws SmartOVException {
+    public List<UUID> getCardsByAccount(UUID accountId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @accountid = ?"
+                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @PersoonID = ?"
             );
             ps.setString(1, accountId.toString());
             ResultSet rs = ps.executeQuery();
             rs.next();
-            List<Kaart> list = new ArrayList<>();
+            List<UUID> list = new ArrayList<>();
             while (rs.next()){
-                list.add(new Kaart(UUID.fromString(rs.getString("KAARTID")), accountId, rs.getString("KAARTNUMMER"),
-                        rs.getString("KAARTNAAM"), rs.getDate("VERVALDATUM"), rs.getDate("KOPPELDATUM")));
+                list.add(UUID.fromString(rs.getString(1)));
             }
             return list;
-        } catch (SQLException e) {
-            throw new SmartOVException(e);
-        }
-    public List<UUID> getCardsByAccount(UUID accountId) throws SmartOVException {
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_ACCOUNT @AccountID = ?;"
-            );
-            ps.setString(1, accountId.toString());
-            ResultSet rs = ps.executeQuery();
-            List<UUID> cards = new ArrayList<>();
-            while(rs.next()) {
-                cards.add(UUID.fromString(rs.getString("KAARTID")));
-            }
-            return cards;
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }
@@ -109,37 +93,17 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }
-
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_BIND_CARD @kaart = ?, @account = ?;"
-            );
-            ps.setString(1, cardId.toString());
-            ps.setString(2, accountId.toString());
-            ps.execute();
-        } catch (SQLException e) {
-            throw new SmartOVException(e);
-        }
     }
 
     @Override
     public void unbindCard(UUID cardId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_UNBIND_CARD @kaartid = ?"
+                    "EXECUTE smartov.dbo.PROC_UNBIND_CARD @KaartID = ?"
             );
             ps.setString(1, cardId.toString());
             ps.execute();
         } catch (SQLException e){
-            throw new SmartOVException(e);
-        }
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_UNBIND_CARD @KaartID = ?;"
-            );
-            ps.setString(1, cardId.toString());
-            ps.execute();
-        } catch (SQLException e) {
             throw new SmartOVException(e);
         }
     }
@@ -167,7 +131,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public void moveProduct(UUID productId, UUID cardId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_MOVE_PRODUCT @productid = ?, @kaartid = ?"
+                    "EXECUTE smartov.dbo.PROC_MOVE_PRODUCT @REISPRODUCTID = ?, @KAARTID = ?"
             );
             ps.setString(1, productId.toString());
             ps.setString(2, cardId.toString());
