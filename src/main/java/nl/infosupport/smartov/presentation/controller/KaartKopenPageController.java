@@ -53,21 +53,15 @@ public class KaartKopenPageController extends HttpServlet {
         String emailadres = request.getParameter("emailadres");
         String kaartnaam = request.getParameter("kaartnaam");
 
-        UUID persoonid = null;
-
         SmartOV smartOV = new SmartOV();
 
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
-            persoonid = dao.createPerson(naam, postcode, huisnummer, date, telefoonnummer, emailadres);
-        } catch (SmartOVException e) {
-            e.printStackTrace();
-        }
-
-        try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
+            UUID persoonid = dao.createPerson(naam, postcode, huisnummer, date, telefoonnummer, emailadres);
             dao.createCard(persoonid , kaartnaam);
             response.sendRedirect("/dashboard");
+
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         out.close();
