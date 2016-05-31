@@ -53,7 +53,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigInteger from, BigInteger ammount) throws SmartOVException {
+    public void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigInteger from, BigInteger amount) throws SmartOVException {
 
     }
 
@@ -109,14 +109,14 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public List<Kortingsreisproduct> getProducts(UUID cardId) throws SmartOVException {
+    public List<Reisproduct> getProducts(UUID cardId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "EXECUTE smartov.dbo.PROC_GET_PRODUCTS @kaartid = ?"
             );
             ps.setString(1, cardId.toString());
             ResultSet rs = ps.executeQuery();
-            List<Kortingsreisproduct> list = new ArrayList<>();
+            List<Reisproduct> list = new ArrayList<>();
             while (rs.next()){
                 list.add(new Kortingsreisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
                         rs.getInt("GELDIGHEID"), rs.getInt("KORTING")));
@@ -235,7 +235,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public BigInteger deductMoney(UUID accountId, BigInteger ammount) throws SmartOVException {
+    public BigInteger deductMoney(UUID accountId, BigInteger amount) throws SmartOVException {
         throw new RuntimeException("Method not implemented!");
     }
 
