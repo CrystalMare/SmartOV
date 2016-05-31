@@ -31,6 +31,15 @@ AS
     @reisproductid,
     GETDATE()
   )
+  IF NOT EXISTS(SELECT 1 FROM dbo.REISPRODUCT WHERE REISPRODUCTID = @productid)
+      RAISERROR (56151, 16, 1);
+
+  INSERT INTO dbo.PRODUCT_OP_KAART (KAARTID, REISPRODUCTID, KOPPELDATUM)
+      VALUES (
+        @kaartid,
+        @productid,
+        GETDATE()
+      )
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
