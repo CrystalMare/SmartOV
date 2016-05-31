@@ -1,19 +1,16 @@
 package nl.infosupport.smartov.database.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.UUID;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public abstract class Reisproduct {
     private UUID reisproductId;
     private String naam;
     private int geldigheid;
-
-    public Reisproduct(UUID reisproductId, String naam, int geldigheid) {
-        this.reisproductId = reisproductId;
-        this.naam = naam;
-        this.geldigheid = geldigheid;
-    }
 }

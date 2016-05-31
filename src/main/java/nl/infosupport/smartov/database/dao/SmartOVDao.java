@@ -102,7 +102,7 @@ public interface SmartOVDao extends CloseableDao {
      */
     @ProcedureId(8)
     @ProcedureName("PROC_GET_PRODUCTS")
-    List<Kortingsreisproduct> getProducts(UUID cardId) throws SmartOVException;
+    List<Reisproduct> getProducts(UUID cardId) throws SmartOVException;
 
     /**
      * Moves a product to a different card
