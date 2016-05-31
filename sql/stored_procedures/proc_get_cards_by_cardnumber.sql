@@ -4,7 +4,8 @@ GO
 
 -- CREATE STORED PROCEDURE
 CREATE PROCEDURE PROC_GET_CARDS_BY_CARDNUMBER -- EXAMPLE NAME
-    @cardnumber int -- EXAMPLE PARAMETERS
+    @cardnumber int, -- EXAMPLE PARAMETERS
+    @detailed bit = 0
 AS
   DECLARE @TranCounter INT;
   SET @TranCounter = @@TRANCOUNT;
@@ -14,12 +15,15 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
---   IF NOT EXISTS (SELECT 1 FROM dbo.ACCOUNT WHERE @cardnumber = ACCOUNTID)
---     RAISERROR(56050, 16, 1);
-
-  SELECT *
-  FROM dbo.KAART
-  WHERE @cardnumber = KAARTNUMMER
+  IF @Detailed = 1
+    SELECT dbo.KAART.KAARTID, KAARTNUMMER, KAARTNAAM, VERVALDATUM, KOPPELDATUM, PERSOONID
+    FROM dbo.KAART
+      LEFT JOIN dbo.PERSOONLIJKE_KAART ON dbo.KAART.KAARTID = dbo.PERSOONLIJKE_KAART.KAARTID
+    WHERE @cardnumber = KAARTNUMMER;
+  ELSE
+    SELECT KAARTID
+    FROM dbo.KAART
+    WHERE @cardnumber = KAARTNUMMER;
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
@@ -40,5 +44,3 @@ AS
     SELECT @ErrorState = ERROR_STATE();
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
---
--- EXECUTE sp_addmessage 56050, 16, 'Account bestaat niet', @replace = REPLACE;
