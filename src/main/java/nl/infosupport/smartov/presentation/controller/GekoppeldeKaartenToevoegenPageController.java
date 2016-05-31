@@ -1,9 +1,5 @@
 package nl.infosupport.smartov.presentation.controller;
 
-import nl.infosupport.smartov.database.SmartOV;
-import nl.infosupport.smartov.database.SmartOVException;
-import nl.infosupport.smartov.database.dao.SmartOVDao;
-import nl.infosupport.smartov.database.model.Kaart;
 import nl.infosupport.smartov.presentation.controller.session.SessionHandler;
 
 import javax.servlet.ServletException;
@@ -11,15 +7,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
-@WebServlet(urlPatterns = "/gekoppelde-kaarten")
-public class GekoppeldeKaartenInzienPageController extends HttpServlet {
+@WebServlet(urlPatterns = "/gekoppelde-kaarten-toevoegen")
+public class GekoppeldeKaartenToevoegenPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,19 +20,7 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.getUserSession(request, response);
 
-        UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
-        SmartOV smartOV = new SmartOV();
-        SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
-        List<Kaart> kaartList = null;
-        try {
-            kaartList = dao.getCardsByAccountDetailed(uuid);
-        } catch (SmartOVException e) {
-            e.printStackTrace();
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("kaart", kaartList);
-        request.getRequestDispatcher("gekoppelde-kaarten-inzien.jsp").forward(request, response);
+        request.getRequestDispatcher("gekoppelde-kaarten-toevoegen.jsp").forward(request, response);
     }
 
     @Override
@@ -55,5 +35,5 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
 
         //request.getRequestDispatcher("login.jsp").forward(request, response);
     }
-}
 
+}

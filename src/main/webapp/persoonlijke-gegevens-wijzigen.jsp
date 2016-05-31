@@ -15,11 +15,7 @@
         <form class="kaart" method="post" action="">
             <ul class="kaart-list">
                 <li class="kaart-item">
-                    <label class="kaart-label">Naam</label>
-                    <input class="kaart-input" type="text" name="naam" value="${naam}" />
-                </li>
-                <li class="kaart-item">
-                    <label class="kaart-label">Postcode</label>
+                    <label class="kaart-label">Kaartnaam</label>
                     <input class="kaart-input" type="text" name="postcode" value="${postcode}"/>
                 </li>
                 <li class="kaart-item">
