@@ -62,7 +62,7 @@ public interface SmartOVDao extends CloseableDao {
     void disableAutoRenewal(UUID accountId) throws SmartOVException;
 
     /**
-     * Gets all the cards that are bound to an account
+     * Gets all the cardIDs that are bound to an account
      *
      * @param accountId the account
      * @return a list of all bound cards
@@ -70,7 +70,7 @@ public interface SmartOVDao extends CloseableDao {
      */
     @ProcedureId(5)
     @ProcedureName("PROC_GET_CARDS_BY_ACCOUNT")
-    List<Kaart> getCardsByAccount(UUID accountId) throws SmartOVException;
+    List<UUID> getCardsByAccount(UUID accountId) throws SmartOVException;
 
     /**
      * Binds a card to an account
@@ -189,7 +189,7 @@ public interface SmartOVDao extends CloseableDao {
      */
     @ProcedureId(14)
     @ProcedureName("PROC_GET_CARDS_BY_OWNER")
-    List<Kaart> getCardsByOwner(UUID cardOwner) throws SmartOVException;
+    List<UUID> getCardsByOwner(UUID cardOwner) throws SmartOVException;
 
     /*
         Procedure 15
@@ -294,5 +294,14 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureName("PROC_GET_PERSON")
     Persoon getPerson(UUID personId) throws SmartOVException;
 
-
+    /**
+     * Creates a new account
+     *
+     * @param personId the person who manages the account
+     * @return the id of the new account
+     * @throws SmartOVException if the person doesnt exist
+     */
+    @ProcedureId(24)
+    @ProcedureName("PROC_CREATE_ACCOUNT")
+    UUID createAccount(UUID personId) throws SmartOVException;
 }
