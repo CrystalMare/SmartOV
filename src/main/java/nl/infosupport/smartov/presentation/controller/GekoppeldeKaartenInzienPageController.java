@@ -28,7 +28,9 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.getUserSession(request, response);
 
-        UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
+        HttpSession session = request.getSession();
+
+        UUID uuid = UUID.fromString(String.valueOf(session.getAttribute("accountid")));
         SmartOV smartOV = new SmartOV();
         SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
         List<Kaart> kaartList = null;
@@ -37,8 +39,7 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         } catch (SmartOVException e) {
             e.printStackTrace();
         }
-
-        HttpSession session = request.getSession();
+        session.setAttribute("accountid", uuid);
         session.setAttribute("kaart", kaartList);
         request.getRequestDispatcher("gekoppelde-kaarten-inzien.jsp").forward(request, response);
     }

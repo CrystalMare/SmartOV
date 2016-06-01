@@ -13,10 +13,13 @@
     <div class="container">
         <span class="main-title">Gekoppelde kaarten wijzigen</span>
         <form class="kaart" method="post" action="">
+            <c:if test='${not empty errorMessage}'>
+                <span class="login-error">${errorMessage}</span>
+            </c:if>
             <ul class="kaart-list">
                 <li class="kaart-item">
                     <label class="kaart-label">Kaartnummer</label>
-                    <input class="kaart-input" type="text" name="naam" value="${naam}" />
+                    <input class="kaart-input" type="text" name="kaartnummer" />
                 </li>
                 <li class="kaart-item">
                     <input class="btn" type="submit" value="Toevoegen" />
