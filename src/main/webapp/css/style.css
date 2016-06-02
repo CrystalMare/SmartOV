@@ -247,6 +247,40 @@ body {
     float: right;
 }
 
+/* OVERVIEW */
+
+.overview {
+    width: 100%;
+    overflow: hidden;
+}
+
+.overview-head {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    width: 100%;
+    overflow: hidden;
+}
+
+.overview-title {
+    width: 15%;
+    padding: 10px 2.5%;
+    display: table-cell;
+    font-weight: bold;
+    float: left;
+}
+
+.overview-item {
+    width: 100%;
+}
+
+.overview-label {
+    width: 15%;
+    padding: 10px 2.5%;
+    float: left;
+    display: table-cell;
+    text-transform: capitalize;
+}
+
 /* FOOTER */
 
 .ftr {
