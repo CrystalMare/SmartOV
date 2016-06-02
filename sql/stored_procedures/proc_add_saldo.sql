@@ -24,6 +24,9 @@ AS
   IF NOT EXISTS(SELECT 1 FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid)
       RAISERROR (56021, 16, 1);
 
+  IF @saldo  < 0
+      RAISERROR (56022, 16, 1);
+
   UPDATE dbo.ACCOUNT
   SET
     SALDO = @saldo + SALDO
@@ -51,4 +54,5 @@ AS
   END CATCH
 
   -- EXECUTE sp_addmessage 56020, 16, 'Het saldo mag niet hoger 200 euro zijn!', @replace = REPLACE;
-  -- EXECUTE sp_addmessage 56021, 16, 'Account bestaat niet!';
+  EXECUTE sp_addmessage 56021, 16, 'Account bestaat niet!', @replace = REPLACE;
+  EXECUTE sp_addmessage 56022, 16, 'Ingevoerde saldo mag niet negatief zijn!', @replace = REPLACE;
