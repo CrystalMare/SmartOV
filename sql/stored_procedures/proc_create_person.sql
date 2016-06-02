@@ -86,15 +86,15 @@ AS
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
 
-  EXECUTE sp_addmessage 56220, 16, 'Special characters zijn niet toegestaan!';
-  EXECUTE sp_addmessage 56221, 16, 'Als dit gebeurt wordt Sven crazy!';
-  EXECUTE sp_addmessage 56222, 16, 'Je moet ouder zijn om 5 jaar om te registreren!';
-  EXECUTE sp_addmessage 56223, 16, 'Geen valide email adress';
-  EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan in het telefoonnumer!', @replace = REPLACE;
-  EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan!';
-  EXECUTE sp_addmessage 56225, 16, 'Geen speciale tekens toegestaan in de postcode', @replace =  REPLACE;
-  EXECUTE sp_addmessage 56226, 16, 'Geen speciale tekens toegestaan in het huisnummer', @replace =  REPLACE;
-  EXECUTE sp_addmessage 56227, 16, 'Huisnummer mag niet langer zijn dan 5 tekens';
-  EXECUTE sp_addmessage 56228, 16, 'Geen valide datum!';
-  EXECUTE sp_addmessage 56229, 16, 'Telefoonnummer mag niet korter dan 8 tekens zijn';
-  EXECUTE sp_addmessage 562210, 16, 'Telefoonnummer mag niet langer dan 15 tekens zijn';
+--   EXECUTE sp_addmessage 56220, 16, 'Special characters zijn niet toegestaan!';
+--   EXECUTE sp_addmessage 56221, 16, 'Als dit gebeurt wordt Sven crazy!';
+--   EXECUTE sp_addmessage 56222, 16, 'Je moet ouder zijn om 5 jaar om te registreren!';
+--   EXECUTE sp_addmessage 56223, 16, 'Geen valide email adress';
+--   EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan in het telefoonnumer!', @replace = REPLACE;
+--   EXECUTE sp_addmessage 56224, 16, 'Characters zijn niet toegestaan!';
+--   EXECUTE sp_addmessage 56225, 16, 'Geen speciale tekens toegestaan in de postcode', @replace =  REPLACE;
+--   EXECUTE sp_addmessage 56226, 16, 'Geen speciale tekens toegestaan in het huisnummer', @replace =  REPLACE;
+--   EXECUTE sp_addmessage 56227, 16, 'Huisnummer mag niet langer zijn dan 5 tekens';
+--   EXECUTE sp_addmessage 56228, 16, 'Geen valide datum!';
+--   EXECUTE sp_addmessage 56229, 16, 'Telefoonnummer mag niet korter dan 8 tekens zijn';
+--   EXECUTE sp_addmessage 562210, 16, 'Telefoonnummer mag niet langer dan 15 tekens zijn';
