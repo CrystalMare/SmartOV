@@ -202,11 +202,17 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureName("PROC_GET_CARDS_BY_OWNER")
     List<UUID> getCardsByOwner(UUID cardOwner) throws SmartOVException;
 
-    /*
-        Procedure 15
-        PROC_CREATE_PRODUCT
-        https://icaconfluence.atlassian.net/browse/OG-166
+    /**
+     * Assigns a product to a card
+     *
+     * @param cardId    the card
+     * @param productId the product
+     * @throws SmartOVException throws an exception if the card or the product does not exist.
+     *                          Or if the same product is already assigned and is still valid.
      */
+    @ProcedureId(15)
+    @ProcedureName("PROC_ASSIGN_PRODUCT_TO_CARD")
+    void assignProductToCard(UUID cardId, UUID productId) throws SmartOVException;
 
     /**
      * Deducts the ammount of money from the account
@@ -218,7 +224,7 @@ public interface SmartOVDao extends CloseableDao {
      */
     @ProcedureId(16)
     @ProcedureName("PROC_DEDUCT_MONEY")
-    BigInteger deductMoney(UUID accountId, BigInteger ammount) throws SmartOVException;
+    BigDecimal deductMoney(UUID accountId, BigDecimal ammount) throws SmartOVException;
 
     /**
      * Requests a replacement card
@@ -317,6 +323,19 @@ public interface SmartOVDao extends CloseableDao {
     UUID createAccount(UUID personId) throws SmartOVException;
 
     /**
+     * Creates a new kortingsreisproduct
+     *
+     * @param name      the name of the product
+     * @param duration  the duration it lasts in days
+     * @param reduction the percentage of price reduction
+     * @return the id of the created product
+     * @throws SmartOVException if the duration is negative or the reduction isnt between 0 and 100
+     */
+    @ProcedureId(25)
+    @ProcedureName("PROC_CREATE_KORTINGSREISPRODUCT")
+    UUID createKortingsreisproduct(String name, int duration, int reduction) throws SmartOVException;
+
+    /**
      * Gets a card by its cardnumber
      *
      * @param cardnumber the cardnumber
@@ -326,5 +345,16 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureId(26)
     @ProcedureName("PROC_GET_CARD_BY_CARDNUMBER")
     Kaart getCardByCardnumber(String cardnumber) throws SmartOVException;
+
+    /**
+     * Gets the accounts that a person is managing
+     *
+     * @param personId the person
+     * @return a list of accounts
+     * @throws SmartOVException if the person does not exist.
+     */
+    @ProcedureId(27)
+    @ProcedureName("PROC_GET_ACCOUNTS_BY_PERSON")
+    List<UUID> getAccountsByPerson(UUID personId) throws SmartOVException;
 
 }

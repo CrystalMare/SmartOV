@@ -254,8 +254,33 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public BigInteger deductMoney(UUID accountId, BigInteger amount) throws SmartOVException {
-        throw new RuntimeException("Method not implemented!");
+    public void assignProductToCard(UUID cardId, UUID productId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_ASSIGN_PRODUCT_TO_CARD @reisproductid = ?, @kaartid = ?;"
+            );
+            ps.setString(1, productId.toString());
+            ps.setString(2, cardId.toString());
+            ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public BigDecimal deductMoney(UUID accountId, BigDecimal amount) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_DEDUCT_MONEY @accountid = ?, @saldo = ?;"
+            );
+            ps.setString(1, accountId.toString());
+            ps.setBigDecimal(2, amount);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getBigDecimal(1);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override
@@ -319,6 +344,41 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             ResultSet rs = ps.executeQuery();
             rs.next();
             return renderCard(rs);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public UUID createKortingsreisproduct(String name, int duration, int reduction) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_CREATE_KORTINGSREISPRODUCT @geldigheid = ?, @korting = ?, @naam = ?;"
+            );
+            ps.setInt(1, duration);
+            ps.setInt(2, reduction);
+            ps.setString(3, name);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return UUID.fromString(rs.getString(1));
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public List<UUID> getAccountsByPerson(UUID personId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_ACCOUNT_BY_PERSON @persoonid = ?;"
+            );
+            ps.setString(1, personId.toString());
+            ResultSet rs = ps.executeQuery();
+            List<UUID> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(UUID.fromString(rs.getString(1)));
+            }
+            return list;
         } catch (SQLException e) {
             throw new SmartOVException(e);
         }
