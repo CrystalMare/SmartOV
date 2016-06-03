@@ -384,6 +384,38 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
         }
     }
 
+    @Override
+    public List<Reisproduct> getAllAvailableProducts(UUID cardId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_ALL_AVAILABLE_PRODUCTS @kaartid = ?;"
+            );
+            ps.setString(1, cardId.toString());
+            ResultSet rs = ps.executeQuery();
+            List<Reisproduct> list = new ArrayList<>();
+            while (rs.next()) {
+                int korting = rs.getInt("KORTING");
+                if (rs.wasNull()) {
+                    list.add(new EenmaligReisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
+                            rs.getInt("GELDIGHEID"), rs.getBigDecimal("TOESLAG")));
+                } else {
+
+                    list.add(new Kortingsreisproduct(UUID.fromString(rs.getString("REISPRODUCTID")), rs.getString("NAAM"),
+                            rs.getInt("GELDIGHEID"), korting));
+                }
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        SmartOV o = new SmartOV();
+        SmartConnector smartConnector = o.getInstance(SmartConnector.class);
+        System.out.println(smartConnector.getAllAvailableProducts(UUID.fromString("9C6FBCBC-5055-4A7D-A4FD-DBC496C099D1")));
+    }
+
     private static Kaart renderCard(ResultSet rs) throws SQLException {
         UUID kaartId = UUID.fromString(rs.getString("KAARTID"));
         String uuidString = rs.getString("ACCOUNTID");
