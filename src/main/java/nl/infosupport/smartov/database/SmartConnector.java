@@ -161,7 +161,7 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     public void moveProduct(UUID productId, UUID cardId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
-                    "EXECUTE smartov.dbo.PROC_MOVE_PRODUCT @REISPRODUCTID = ?, @KAARTID = ?"
+                    "EXECUTE smartov.dbo.PROC_MOVE_PRODUCT @productOpKaartId = ?, @kaartid = ?"
             );
             ps.setString(1, productId.toString());
             ps.setString(2, cardId.toString());
