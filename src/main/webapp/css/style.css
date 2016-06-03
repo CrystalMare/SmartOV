@@ -19,6 +19,7 @@ body {
     max-width: 1200px;
     width: 100%;
     padding: 0 20px;
+    position: relative;
 }
 
 .cboth {
@@ -161,8 +162,14 @@ body {
     padding: 5px 10px;
     color: #fff;
     font-size: 1em;
-    width: 50%;
     font-weight: bold;
+    text-decoration: none;
+}
+
+.btn.for-add {
+    position: absolute;
+    right: 20px;
+    top: 0;
 }
 
 .btn:hover {

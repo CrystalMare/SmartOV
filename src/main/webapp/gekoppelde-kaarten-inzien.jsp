@@ -12,6 +12,7 @@
 <div class="main" role="main">
     <div class="container">
         <span class="main-title">Gekoppelde kaarten</span>
+        <a href="gekoppelde-kaarten-toevoegen" class="btn for-add">Kaart toevoegen</a>
         <div class="overview">
             <div class="overview-head">
                 <span class="overview-title">Kaartnummer</span>
@@ -22,7 +23,7 @@
             </div>
             <c:forEach items="${kaart}" var="kaart">
                 <div class="overview-item">
-                    <span class="overview-label"><c:out value="${kaart.kaartNummer}"/></span>
+                    <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
                     <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
                     <span class="overview-label"><c:out value="${kaart.vervalDatum}"/></span>
                     <span class="overview-label"><c:out value="${kaart.koppelDatum}"/></span>
