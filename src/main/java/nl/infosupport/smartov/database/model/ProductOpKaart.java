@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class ProductOpKaart {
+    private UUID productOpKaartId;
     private Reisproduct reisproduct;
     private UUID kaartId;
     private UUID reisproductId;
