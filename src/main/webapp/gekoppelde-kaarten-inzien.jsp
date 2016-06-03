@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -25,8 +26,12 @@
                 <div class="overview-item">
                     <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
                     <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
-                    <span class="overview-label"><c:out value="${kaart.vervalDatum}"/></span>
-                    <span class="overview-label"><c:out value="${kaart.koppelDatum}"/></span>
+                    <span class="overview-label">
+                        <c:out value="${kaart.vervalDatum}"/>
+                    </span>
+                    <span class="overview-label">
+                        <c:out value="${kaart.koppelDatum}"/>
+                    </span>
                     <span class="overview-label"><a href="verwijder-kaart?kaartId=${kaart.kaartId}">Verwijder</a></span>
                 </div>
             </c:forEach>

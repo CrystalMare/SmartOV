@@ -30,7 +30,7 @@ public class SaldoOpwaarderenPageController extends HttpServlet {
         String saldo = "";
 
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
-            saldo = dao.getSaldo(uuid).toPlainString();
+            saldo = String.format("%.2f", dao.getSaldo(uuid));;
         } catch (SmartOVException e) {
             e.printStackTrace();
         }
