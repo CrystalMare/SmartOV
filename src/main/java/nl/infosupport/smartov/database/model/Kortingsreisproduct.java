@@ -12,7 +12,6 @@ import java.util.UUID;
 public class Kortingsreisproduct extends Reisproduct {
     private int korting;
 
-
     public Kortingsreisproduct(UUID reisproductId, String naam, int geldigheid, int korting) {
         super(reisproductId, naam, geldigheid);
         this.korting = korting;

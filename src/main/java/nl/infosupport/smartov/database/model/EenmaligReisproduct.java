@@ -1,19 +1,19 @@
 package nl.infosupport.smartov.database.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class EenmaligReisproduct extends Reisproduct {
-    BigInteger toeslag;
+    BigDecimal toeslag;
 
-    public EenmaligReisproduct(UUID reisproductId, String naam, int geldigheid) {
+    public EenmaligReisproduct(UUID reisproductId, String naam, int geldigheid, BigDecimal toeslag) {
         super(reisproductId, naam, geldigheid);
+        this.toeslag = toeslag;
     }
 }
