@@ -37,7 +37,7 @@ public class ReisproductOpKaartWijzigenPageController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         Map m = request.getParameterMap();
-        String[] paramID = (String[]) m.get("reisproductId");
+        String[] paramID = (String[]) m.get("productOpKaartId");
         UUID reisproductID = UUID.fromString(paramID[0]);
 
         String kaartnummer = request.getParameter("kaartnummer");
