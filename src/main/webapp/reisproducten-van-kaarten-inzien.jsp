@@ -22,9 +22,9 @@
                 </div>
                 <c:forEach items="${reisproduct}" var="reisproduct">
                     <div class="overview-item">
-                        <span class="overview-label"><c:out value="${reisproduct.naam}"/></span>
-                        <span class="overview-label"><c:out value="${reisproduct.geldigheid}"/></span>
-                        <span class="overview-label"><c:out value="${reisproduct.korting}"/></span>
+                        <span class="overview-label"><c:out value="${reisproduct.reisproduct.naam}"/></span>
+                        <span class="overview-label"><c:out value="${reisproduct.reisproduct.geldigheid}"/></span>
+                        <span class="overview-label"><c:out value="${reisproduct.reisproduct.korting}"/></span>
                         <span class="overview-label"><a href="reisproduct-wijzigen?productOpKaartId=${reisproduct.productOpKaartId}">Verplaats</a></span>
                         <span class="overview-label">&nbsp;</span>
                     </div>
