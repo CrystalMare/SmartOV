@@ -46,23 +46,13 @@ public class ReisproductOpKaartToevoegenPageController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession();
-
-        String kaartnummer = request.getParameter("kaartnummer");
         UUID reisproduct = UUID.fromString(request.getParameter("reisproduct"));
-
+        HttpSession session = request.getSession();
         SmartOV smartOV = new SmartOV();
-        Kaart kaart = null;
-
+        UUID kaartID = (UUID) session.getAttribute("kaartId");
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
-            kaart = dao.getCardByCardnumber(kaartnummer);
-        } catch (SmartOVException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
-            dao.assignProductToCard(kaart.getKaartId(), reisproduct);
-            response.sendRedirect("/gekoppelde-kaarten");
+            dao.assignProductToCard(kaartID, reisproduct);
+            response.sendRedirect("/reisproduct-inzien?kaartId=" + kaartID.toString());
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }

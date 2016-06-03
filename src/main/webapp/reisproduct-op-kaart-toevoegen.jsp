@@ -18,10 +18,6 @@
             </c:if>
             <ul class="kaart-list">
                 <li class="kaart-item">
-                    <label class="kaart-label">Kaartnummer</label>
-                    <input class="kaart-input" type="text" name="kaartnummer" />
-                </li>
-                <li class="kaart-item">
                     <label class="kaart-label">Reisproduct</label>
                     <select name="reisproduct">
                         <c:forEach items="${reisproduct}" var="reisproduct">

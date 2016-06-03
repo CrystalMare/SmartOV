@@ -54,7 +54,7 @@ public class ReisproductOpKaartWijzigenPageController extends HttpServlet {
 
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
             dao.moveProduct(reisproductID, kaart.getKaartId());
-            response.sendRedirect("/gekoppelde-kaarten");
+            response.sendRedirect("/reisproduct-inzien?kaartId=" + kaart.getKaartId().toString());
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }
