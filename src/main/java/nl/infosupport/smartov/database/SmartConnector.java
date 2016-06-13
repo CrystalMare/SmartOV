@@ -421,6 +421,21 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
         }
     }
 
+    @Override
+    public Kaart getCard(UUID cardid) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_CARD @cardid = ?, @detailed = 1;"
+            );
+            ps.setString(1, cardid.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return renderCard(rs);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
     private static Kaart renderCard(ResultSet rs) throws SQLException {
         UUID kaartId = UUID.fromString(rs.getString("KAARTID"));
         String uuidString = rs.getString("ACCOUNTID");
