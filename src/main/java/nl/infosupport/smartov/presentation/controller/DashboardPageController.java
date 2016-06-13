@@ -22,10 +22,21 @@ public class DashboardPageController extends HttpServlet {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.getUserSession(request, response);
 
-        UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
-
         HttpSession session = request.getSession();
-        session.setAttribute("accountid", uuid);
+        UUID uuid = null;
+
+        switch (session.getAttribute("name").toString()) {
+            case "KAARTHOUDER":
+                uuid = UUID.fromString("D1A1D419-7CD1-42C7-A202-CF03A9A4FB4C");
+                session.setAttribute("kaartid", uuid);
+                break;
+            case "SALDOBEHEERDER":
+                uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
+                session.setAttribute("accountid", uuid);
+                break;
+        }
+
+
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }

@@ -29,32 +29,40 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         sessionHandler.getUserSession(request, response);
 
         HttpSession session = request.getSession();
-
-        UUID uuid = UUID.fromString(String.valueOf(session.getAttribute("accountid")));
         SmartOV smartOV = new SmartOV();
         SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
+
+        UUID uuid = null;
         List<Kaart> kaartList = null;
-        try {
-            kaartList = dao.getCardsByAccountDetailed(uuid);
-        } catch (SmartOVException e) {
-            e.printStackTrace();
+
+        switch (session.getAttribute("name").toString()) {
+            case "KAARTHOUDER":
+                uuid = (UUID) session.getAttribute("kaartid");
+
+                try {
+                    kaartList = dao.getCardsByAccountDetailed(uuid);
+                } catch (SmartOVException e) {
+                    e.printStackTrace();
+                }
+
+                session.setAttribute("kaartid", uuid);
+                break;
+            case "SALDOBEHEERDER":
+                uuid = (UUID) session.getAttribute("accountid");
+
+                try {
+                    kaartList = dao.getCardsByOwner(uuid);
+                } catch (SmartOVException e) {
+                    e.printStackTrace();
+                }
+
+                session.setAttribute("accountid", uuid);
+                break;
         }
-        session.setAttribute("accountid", uuid);
+
+
         session.setAttribute("kaart", kaartList);
         request.getRequestDispatcher("gekoppelde-kaarten-inzien.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
-
-
-        out.close();
-
-        //request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }
 

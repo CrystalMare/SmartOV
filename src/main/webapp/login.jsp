@@ -8,6 +8,7 @@
 </head>
 <body>
     <%@include file="header.jsp"%>
+    <%@include file="navigation.jsp"%>
     <div class="main" role="main">
         <div class="container">
             <div class="main-item">
@@ -19,7 +20,10 @@
                     <ul class="login-list">
                         <li class="login-item">
                             <label class="login-label">Naam</label>
-                            <input class="login-input" type="text" name="name" />
+                            <select name="name">
+                                <option value="KAARTHOUDER">Kaarthouder</option>
+                                <option value="SALDOBEHEERDER">Saldobeheerder</option>
+                            </select>
                         </li>
                         <li class="login-item">
                             <input class="btn" type="submit" value="Login" />
