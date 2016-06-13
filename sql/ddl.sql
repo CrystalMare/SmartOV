@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2012                    */
-/* Created on:     26-5-2016 16:30:11                           */
+/* Created on:     13-6-2016 14:33:18                           */
 /*==============================================================*/
 
 
@@ -79,6 +79,34 @@ if exists (select 1
    where r.fkeyid = object_id('REGIOPRODUCT') and o.name = 'FK_REGIOPRO_SUBTYPE_V_KORTINGS')
 alter table REGIOPRODUCT
    drop constraint FK_REGIOPRO_SUBTYPE_V_KORTINGS
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('REIS') and o.name = 'FK_REIS_BEGINPUNT_STATION')
+alter table REIS
+   drop constraint FK_REIS_BEGINPUNT_STATION
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('REIS') and o.name = 'FK_REIS_EINDPUNT_STATION')
+alter table REIS
+   drop constraint FK_REIS_EINDPUNT_STATION
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('REIS') and o.name = 'FK_REIS_INGECHECK_KAART')
+alter table REIS
+   drop constraint FK_REIS_INGECHECK_KAART
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('REIS') and o.name = 'FK_REIS_OP_KOSTEN_ACCOUNT')
+alter table REIS
+   drop constraint FK_REIS_OP_KOSTEN_ACCOUNT
 go
 
 if exists (select 1
@@ -206,10 +234,60 @@ if exists (select 1
 go
 
 if exists (select 1
+            from  sysindexes
+           where  id    = object_id('REIS')
+            and   name  = 'FK_EINDPUNT'
+            and   indid > 0
+            and   indid < 255)
+   drop index REIS.FK_EINDPUNT
+go
+
+if exists (select 1
+            from  sysindexes
+           where  id    = object_id('REIS')
+            and   name  = 'FK_BEGINPUNT'
+            and   indid > 0
+            and   indid < 255)
+   drop index REIS.FK_BEGINPUNT
+go
+
+if exists (select 1
+            from  sysindexes
+           where  id    = object_id('REIS')
+            and   name  = 'FK_OP_KOSTEN_VAN'
+            and   indid > 0
+            and   indid < 255)
+   drop index REIS.FK_OP_KOSTEN_VAN
+go
+
+if exists (select 1
+            from  sysindexes
+           where  id    = object_id('REIS')
+            and   name  = 'FK_INGECHECKED_MET'
+            and   indid > 0
+            and   indid < 255)
+   drop index REIS.FK_INGECHECKED_MET
+go
+
+if exists (select 1
+            from  sysobjects
+           where  id = object_id('REIS')
+            and   type = 'U')
+   drop table REIS
+go
+
+if exists (select 1
             from  sysobjects
            where  id = object_id('REISPRODUCT')
             and   type = 'U')
    drop table REISPRODUCT
+go
+
+if exists (select 1
+            from  sysobjects
+           where  id = object_id('STATION')
+            and   type = 'U')
+   drop table STATION
 go
 
 if exists(select 1 from systypes where name='BANKREKENING')
@@ -474,8 +552,7 @@ create table PRODUCT_OP_KAART (
    KAARTID              SURROGATEKEY         not null,
    REISPRODUCTID        SURROGATEKEY         not null,
    KOPPELDATUM          DATUM                not null,
-   constraint PK_PRODUCT_OP_KAART primary key (PRODUCTOPKAARTID),
-   constraint AK_UNIQUE_PRODUCT_OP__PRODUCT_ unique (KAARTID, REISPRODUCTID)
+   constraint PK_PRODUCT_OP_KAART primary key (PRODUCTOPKAARTID)
 )
 go
 
@@ -530,6 +607,60 @@ create nonclustered index FK_IS_GELDIG_IN on REGIOPRODUCT (REGIOID ASC)
 go
 
 /*==============================================================*/
+/* Table: REIS                                                  */
+/*==============================================================*/
+create table REIS (
+   REISID               SURROGATEKEY         not null,
+   EINDPUNT             SURROGATEKEY         null,
+   ACCOUNTID            SURROGATEKEY         not null,
+   BEGINPUNT            SURROGATEKEY         not null,
+   KAARTID              SURROGATEKEY         not null,
+   PRIJS                GELD                 null,
+   constraint PK_REIS primary key (REISID)
+)
+go
+
+/*==============================================================*/
+/* Index: FK_INGECHECKED_MET                                    */
+/*==============================================================*/
+
+
+
+
+create nonclustered index FK_INGECHECKED_MET on REIS (KAARTID ASC)
+go
+
+/*==============================================================*/
+/* Index: FK_OP_KOSTEN_VAN                                      */
+/*==============================================================*/
+
+
+
+
+create nonclustered index FK_OP_KOSTEN_VAN on REIS (ACCOUNTID ASC)
+go
+
+/*==============================================================*/
+/* Index: FK_BEGINPUNT                                          */
+/*==============================================================*/
+
+
+
+
+create nonclustered index FK_BEGINPUNT on REIS (BEGINPUNT ASC)
+go
+
+/*==============================================================*/
+/* Index: FK_EINDPUNT                                           */
+/*==============================================================*/
+
+
+
+
+create nonclustered index FK_EINDPUNT on REIS (EINDPUNT ASC)
+go
+
+/*==============================================================*/
 /* Table: REISPRODUCT                                           */
 /*==============================================================*/
 create table REISPRODUCT (
@@ -537,6 +668,16 @@ create table REISPRODUCT (
    NAAM                 NAAM                 not null,
    GELDIGHEID           DAGEN                not null,
    constraint PK_REISPRODUCT primary key (REISPRODUCTID)
+)
+go
+
+/*==============================================================*/
+/* Table: STATION                                               */
+/*==============================================================*/
+create table STATION (
+   STATIONID            SURROGATEKEY         not null,
+   NAAM                 NAAM                 not null,
+   constraint PK_STATION primary key (STATIONID)
 )
 go
 
@@ -593,5 +734,25 @@ go
 alter table REGIOPRODUCT
    add constraint FK_REGIOPRO_SUBTYPE_V_KORTINGS foreign key (REISPRODUCTID)
       references KORTINGSREISPRODUCT (REISPRODUCTID)
+go
+
+alter table REIS
+   add constraint FK_REIS_BEGINPUNT_STATION foreign key (BEGINPUNT)
+      references STATION (STATIONID)
+go
+
+alter table REIS
+   add constraint FK_REIS_EINDPUNT_STATION foreign key (EINDPUNT)
+      references STATION (STATIONID)
+go
+
+alter table REIS
+   add constraint FK_REIS_INGECHECK_KAART foreign key (KAARTID)
+      references KAART (KAARTID)
+go
+
+alter table REIS
+   add constraint FK_REIS_OP_KOSTEN_ACCOUNT foreign key (ACCOUNTID)
+      references ACCOUNT (ACCOUNTID)
 go
 
