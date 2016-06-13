@@ -119,7 +119,7 @@ public interface SmartOVDao extends CloseableDao {
      * Moves a product to a different card
      *
      * @param productOpKaartId the productoncard id
-     * @param cardId    the card target
+     * @param cardId           the card target
      * @throws SmartOVException if the card or product doesn't exist, or if current card of the product is not bound to
      *                          the same account.
      */
@@ -367,4 +367,15 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureId(31)
     @ProcedureName("PROC_GET_ALL_AVAILABLE_PRODUCTS")
     List<Reisproduct> getAllAvailableProducts(UUID cardId) throws SmartOVException;
+
+    /**
+     * Gets a card by its id
+     *
+     * @param cardid the id
+     * @return the card
+     * @throws SmartOVException if the card does not exist
+     */
+    @ProcedureId(32)
+    @ProcedureName("PROC_GET_CARD")
+    Kaart getCard(UUID cardid) throws SmartOVException;
 }
