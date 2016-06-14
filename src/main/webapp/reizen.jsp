@@ -11,7 +11,23 @@
 <%@include file="navigation.jsp"%>
 <div class="main" role="main">
     <div class="container">
-
+        <span class="main-title">Reizen</span>
+        <form method="post" action="" class="reis">
+            <c:if test='${not empty message}'>
+                <span class="login-error">${message}</span>
+            </c:if>
+            <label>Kaartnummer</label>
+            <select name="kaart">
+                <c:forEach items="${kaartList}" var="kaart">
+                    <option value="${kaart.kaartId}">${kaart.kaartNummer}</option>
+                </c:forEach>
+            </select>
+            <select name="station">
+                <option value="6D36C50C-2810-44E1-9117-37432FA4D427">Veenendaal - De Klomp</option>
+                <option value="02CA1105-67F5-418B-A2E2-FEE82C24905D">Centraal Station Arnhem</option>
+            </select>
+            <input class="btn" type="submit" value="in-/uitchecken" />
+        </form>
     </div>
 </div>
 <%@include file="footer.jsp"%>

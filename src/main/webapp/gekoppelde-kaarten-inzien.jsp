@@ -13,7 +13,7 @@
 <div class="main" role="main">
     <div class="container">
         <span class="main-title">Kaarten</span>
-        <c:if test="${not empty kaartList}">
+        <c:if test="${name == 'SALDOBEHEERDER'}">
             <a href="gekoppelde-kaarten-toevoegen" class="btn for-add">Kaart toevoegen</a>
         </c:if>
         <div class="overview">
@@ -24,38 +24,21 @@
                 <span class="overview-title">Koppeldatum</span>
                 <span class="overview-title">&nbsp;</span>
             </div>
-            <c:if test="${name == 'SALDOBEHEERDER'}">
-                <c:forEach items="${kaartList}" var="kaart">
-                    <div class="overview-item">
-                        <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
-                        <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
-                        <span class="overview-label">
-                            <c:out value="${kaart.vervalDatum}"/>
-                        </span>
-                        <span class="overview-label">
-                            <c:out value="${kaart.koppelDatum}"/>
-                        </span>
-                        <span class="overview-label">
-                            <a href="verwijder-kaart?kaartId=${kaart.kaartId}">Verwijder</a>
-                        </span>
-                    </div>
-                </c:forEach>
-            </c:if>
-            <c:if test="${name == 'KAARTHOUDER'}">
-                <c:forEach items="${kaart}" var="kaart">
-                    <div class="overview-item">
-                        <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
-                        <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
-                        <span class="overview-label">
-                            <c:out value="${kaart.vervalDatum}"/>
-                        </span>
-                        <span class="overview-label">
-                            <c:out value="${kaart.koppelDatum}"/>
-                        </span>
-                        <span class="overview-label">&nbsp;</span>
-                    </div>
-                </c:forEach>
-            </c:if>
+            <c:forEach items="${kaartList}" var="kaart">
+                <div class="overview-item">
+                    <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
+                    <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
+                    <span class="overview-label">
+                        <c:out value="${kaart.vervalDatum}"/>
+                    </span>
+                    <span class="overview-label">
+                        <c:out value="${kaart.koppelDatum}"/>
+                    </span>
+                    <span class="overview-label">
+                        <a href="verwijder-kaart?kaartId=${kaart.kaartId}">Verwijder</a>
+                    </span>
+                </div>
+            </c:forEach>
         </div>
     </div>
 </div>

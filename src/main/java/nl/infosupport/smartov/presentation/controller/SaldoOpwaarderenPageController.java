@@ -56,7 +56,7 @@ public class SaldoOpwaarderenPageController extends HttpServlet {
 
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
             dao.addSaldo(uuid, new BigDecimal(saldo));
-            response.sendRedirect("/dashboard");
+            response.sendRedirect("/saldo-opwaarderen");
         } catch (SmartOVException e) {
             e.printStackTrace();
         }

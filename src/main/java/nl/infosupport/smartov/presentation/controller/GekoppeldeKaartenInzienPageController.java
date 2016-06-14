@@ -38,24 +38,14 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         switch (session.getAttribute("name").toString()) {
             case "KAARTHOUDER":
                 uuid = (UUID) session.getAttribute("personid");
-                List<UUID> uuidList = null;
                 try {
-                    uuidList = dao.getCardsByOwner(uuid);
+                    kaartList = dao.getCardsByOwner(uuid);
                 } catch (SmartOVException e) {
                     throw new RuntimeException(e);
                 }
 
-                for (UUID id : uuidList) {
-                    try {
-                        kaartList.add(dao.getCard(id));
-                    } catch (SmartOVException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-
                 session.setAttribute("personid", uuid);
-                session.setAttribute("kaart", kaartList);
+
                 break;
             case "SALDOBEHEERDER":
                 uuid = (UUID) session.getAttribute("accountid");
@@ -67,10 +57,10 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
                 }
 
                 session.setAttribute("accountid", uuid);
-                session.setAttribute("kaartList", kaartList);
+
                 break;
         }
-
+        session.setAttribute("kaartList", kaartList);
         request.getRequestDispatcher("gekoppelde-kaarten-inzien.jsp").forward(request, response);
     }
 
