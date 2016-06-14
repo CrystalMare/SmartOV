@@ -27,8 +27,8 @@ public class DashboardPageController extends HttpServlet {
 
         switch (session.getAttribute("name").toString()) {
             case "KAARTHOUDER":
-                uuid = UUID.fromString("52584cb0-9f49-4b8d-b608-3506d38500b9");
-                session.setAttribute("kaartid", uuid);
+                uuid = UUID.fromString("535774F0-273D-48E1-A567-05A45813BF24");
+                session.setAttribute("personid", uuid);
                 break;
             case "SALDOBEHEERDER":
                 uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
@@ -39,14 +39,4 @@ public class DashboardPageController extends HttpServlet {
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-
-            out.close();
-
-            //request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
 }

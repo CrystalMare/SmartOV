@@ -32,22 +32,30 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         SmartOV smartOV = new SmartOV();
         SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
 
-        List<Kaart> kaartList = null;
+        List<Kaart> kaartList = new ArrayList<>();
         UUID uuid = null;
-        Kaart kaart = null;
 
         switch (session.getAttribute("name").toString()) {
             case "KAARTHOUDER":
-                uuid = (UUID) session.getAttribute("kaartid");
+                uuid = (UUID) session.getAttribute("personid");
+                List<UUID> uuidList = null;
                 try {
-                    kaart = dao.getCard(uuid);
-
+                    uuidList = dao.getCardsByOwner(uuid);
                 } catch (SmartOVException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
 
-                session.setAttribute("kaartid", uuid);
-                session.setAttribute("kaart", kaart);
+                for (UUID id : uuidList) {
+                    try {
+                        kaartList.add(dao.getCard(id));
+                    } catch (SmartOVException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+
+                session.setAttribute("personid", uuid);
+                session.setAttribute("kaart", kaartList);
                 break;
             case "SALDOBEHEERDER":
                 uuid = (UUID) session.getAttribute("accountid");
@@ -55,7 +63,7 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
                 try {
                     kaartList = dao.getCardsByAccountDetailed(uuid);
                 } catch (SmartOVException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
 
                 session.setAttribute("accountid", uuid);
@@ -65,5 +73,6 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
 
         request.getRequestDispatcher("gekoppelde-kaarten-inzien.jsp").forward(request, response);
     }
+
 }
 

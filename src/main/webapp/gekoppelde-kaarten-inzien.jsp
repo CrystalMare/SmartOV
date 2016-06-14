@@ -42,17 +42,19 @@
                 </c:forEach>
             </c:if>
             <c:if test="${name == 'KAARTHOUDER'}">
-                <div class="overview-item">
-                    <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
-                    <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
-                    <span class="overview-label">
-                        <c:out value="${kaart.vervalDatum}"/>
-                    </span>
-                    <span class="overview-label">
-                        <c:out value="${kaart.koppelDatum}"/>
-                    </span>
-                    <span class="overview-label">&nbsp;</span>
-                </div>
+                <c:forEach items="${kaart}" var="kaart">
+                    <div class="overview-item">
+                        <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
+                        <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
+                        <span class="overview-label">
+                            <c:out value="${kaart.vervalDatum}"/>
+                        </span>
+                        <span class="overview-label">
+                            <c:out value="${kaart.koppelDatum}"/>
+                        </span>
+                        <span class="overview-label">&nbsp;</span>
+                    </div>
+                </c:forEach>
             </c:if>
         </div>
     </div>
