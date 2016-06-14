@@ -200,7 +200,7 @@ public interface SmartOVDao extends CloseableDao {
      */
     @ProcedureId(14)
     @ProcedureName("PROC_GET_CARDS_BY_OWNER")
-    List<UUID> getCardsByOwner(UUID cardOwner) throws SmartOVException;
+    List<Kaart> getCardsByOwner(UUID cardOwner) throws SmartOVException;
 
     /**
      * Assigns a product to a card
@@ -255,19 +255,19 @@ public interface SmartOVDao extends CloseableDao {
      * @throws SmartOVException if the card or station doesn't exist. Or if the ballance is not enough.
      */
     @ProcedureId(19)
-    @ProcedureName("PROC_START_TRAVEL")
-    void startTravel(UUID cardId, UUID stationId) throws SmartOVException;
+    @ProcedureName("PROC_TRAVEL")
+    void travel(UUID cardId, UUID stationId) throws SmartOVException;
 
     /**
-     * Ends a journey with a card
+     * Checks if the card is checked in
      *
-     * @param cardId    the cardid
-     * @param stationId the station
-     * @throws SmartOVException if the card or station doesn't exist.
+     * @param cardId the card
+     * @return true if the card is checked in
+     * @throws SmartOVException
      */
     @ProcedureId(20)
-    @ProcedureName("PROC_END_TRAVEL")
-    void endTravel(UUID cardId, UUID stationId) throws SmartOVException;
+    @ProcedureName("PROC_IS_CHECKED_IN")
+    boolean isCheckedIn(UUID cardId) throws SmartOVException;
 
     /**
      * <p>
