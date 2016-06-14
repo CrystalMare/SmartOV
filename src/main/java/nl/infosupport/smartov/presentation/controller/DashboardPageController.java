@@ -27,7 +27,7 @@ public class DashboardPageController extends HttpServlet {
 
         switch (session.getAttribute("name").toString()) {
             case "KAARTHOUDER":
-                uuid = UUID.fromString("D1A1D419-7CD1-42C7-A202-CF03A9A4FB4C");
+                uuid = UUID.fromString("52584cb0-9f49-4b8d-b608-3506d38500b9");
                 session.setAttribute("kaartid", uuid);
                 break;
             case "SALDOBEHEERDER":
@@ -35,8 +35,6 @@ public class DashboardPageController extends HttpServlet {
                 session.setAttribute("accountid", uuid);
                 break;
         }
-
-
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }

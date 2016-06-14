@@ -26,7 +26,11 @@
                         <span class="overview-label"><c:out value="${reisproduct.reisproduct.naam}"/></span>
                         <span class="overview-label"><c:out value="${reisproduct.reisproduct.geldigheid}"/></span>
                         <span class="overview-label">&nbsp;</span>
-                        <span class="overview-label"><a href="reisproduct-wijzigen?productOpKaartId=${reisproduct.productOpKaartId}">Verplaats</a></span>
+                        <span class="overview-label">
+                            <c:if test="${name == 'SALDOBEHEERDER'}">
+                                <a href="reisproduct-wijzigen?productOpKaartId=${reisproduct.productOpKaartId}">Verplaats</a>
+                            </c:if>
+                        </span>
                         <span class="overview-label">&nbsp;</span>
                     </div>
                 </c:forEach>
