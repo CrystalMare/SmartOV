@@ -247,16 +247,16 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public List<UUID> getCardsByOwner(UUID cardOwner) throws SmartOVException {
+    public List<Kaart> getCardsByOwner(UUID cardOwner) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(
                     "EXECUTE smartov.dbo.PROC_GET_CARDS_BY_OWNER @PersoonID = ?;"
             );
             ps.setString(1, cardOwner.toString());
             ResultSet rs = ps.executeQuery();
-            List<UUID> cards = new ArrayList<>();
+            List<Kaart> cards = new ArrayList<>();
             while (rs.next()) {
-                cards.add(UUID.fromString(rs.getString("KAARTID")));
+                cards.add(renderCard(rs));
             }
             return cards;
         } catch (SQLException e) {
@@ -305,13 +305,32 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public void startTravel(UUID cardId, UUID stationId) throws SmartOVException {
-        throw new RuntimeException("Method not implemented!");
+    public void travel(UUID cardId, UUID stationId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_TRAVEL @kaartid = ?, @stationid = ?;"
+            );
+            ps.setString(1, cardId.toString());
+            ps.setString(2, stationId.toString());
+            ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override
-    public void endTravel(UUID cardId, UUID stationId) throws SmartOVException {
-        throw new RuntimeException("Method not implemented!");
+    public boolean isCheckedIn(UUID cardId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_IS_CHECKED_IN @kaartid = ?;"
+            );
+            ps.setString(1, cardId.toString());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getBoolean(1);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override
