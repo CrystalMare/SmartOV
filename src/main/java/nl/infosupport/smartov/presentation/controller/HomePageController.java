@@ -11,6 +11,9 @@ public class HomePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().setAttribute("name", null);
+        request.getSession().invalidate();
+
         HttpSession session = request.getSession();
 
         if (session != null) {

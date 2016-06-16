@@ -11,7 +11,7 @@
     <%@include file="navigation.jsp"%>
     <div class="main" role="main">
         <div class="container">
-            hallo
+            Welkom
         </div>
     </div>
     <%@include file="footer.jsp"%>

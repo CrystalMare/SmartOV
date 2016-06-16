@@ -20,7 +20,9 @@
                     <ul class="login-list">
                         <li class="login-item">
                             <label class="login-label">Naam</label>
-                            <select name="name">
+                        </li>
+                        <li class="login-item">
+                            <select class="login-select" name="name">
                                 <option value="KAARTHOUDER">Kaarthouder</option>
                                 <option value="SALDOBEHEERDER">Saldobeheerder</option>
                             </select>

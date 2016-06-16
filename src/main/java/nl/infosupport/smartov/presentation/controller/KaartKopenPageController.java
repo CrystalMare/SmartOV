@@ -25,9 +25,6 @@ public class KaartKopenPageController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
 
-        SessionHandler sessionHandler = new SessionHandler();
-        sessionHandler.getUserSession(request, response);
-
         request.getRequestDispatcher("kaart-kopen.jsp").forward(request, response);
     }
 
@@ -46,7 +43,7 @@ public class KaartKopenPageController extends HttpServlet {
         try {
             date = format.parse(geboortedatum);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         String telefoonnummer = request.getParameter("telefoonnummer");

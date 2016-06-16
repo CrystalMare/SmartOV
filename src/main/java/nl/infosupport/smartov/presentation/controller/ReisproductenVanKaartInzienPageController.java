@@ -40,23 +40,11 @@ public class ReisproductenVanKaartInzienPageController extends HttpServlet {
         try {
             productOpKaartList = dao.getProducts(kaartID);
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         session.setAttribute("kaartId", kaartID);
         session.setAttribute("reisproduct", productOpKaartList);
 
         request.getRequestDispatcher("reisproducten-van-kaarten-inzien.jsp").forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
-        out.close();
-
-        //request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
-
 }

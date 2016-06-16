@@ -8,6 +8,7 @@
 </head>
 <body>
 <%@include file="header.jsp"%>
+<%@include file="navigation.jsp"%>
 <div class="main" role="main">
     <div class="container">
         <div class="main-item">

@@ -29,7 +29,7 @@ public class GekoppeldeKaartenVerwijderenPageController extends HttpServlet {
         try {
             dao.unbindCard(kaartID);
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         response.sendRedirect("/gekoppelde-kaarten");

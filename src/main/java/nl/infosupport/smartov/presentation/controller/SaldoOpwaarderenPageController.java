@@ -32,7 +32,7 @@ public class SaldoOpwaarderenPageController extends HttpServlet {
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
             saldo = String.format("%.2f", dao.getSaldo(uuid));;
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         HttpSession session = request.getSession();
@@ -48,8 +48,6 @@ public class SaldoOpwaarderenPageController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String saldo = request.getParameter("saldo");
-//        Optional<Cookie> cookie = Arrays.asList(request.getCookies()).stream().filter(c -> Objects.equals(c.getName(), "uuid")).findFirst();
-//        UUID uuid = UUID.fromString(cookie.get().getValue());
         SmartOV smartOV = new SmartOV();
 
         UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
@@ -58,8 +56,9 @@ public class SaldoOpwaarderenPageController extends HttpServlet {
             dao.addSaldo(uuid, new BigDecimal(saldo));
             response.sendRedirect("/saldo-opwaarderen");
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+        out.close();
     }
 
 }

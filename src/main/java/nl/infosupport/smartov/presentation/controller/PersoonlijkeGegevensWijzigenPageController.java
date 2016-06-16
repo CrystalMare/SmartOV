@@ -40,7 +40,7 @@ public class PersoonlijkeGegevensWijzigenPageController extends HttpServlet {
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
             persoon = dao.getPerson(uuid);
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         HttpSession session = request.getSession();
@@ -72,7 +72,7 @@ public class PersoonlijkeGegevensWijzigenPageController extends HttpServlet {
         try {
             date = FORMAT.parse(geboortedatum);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         SmartOV smartOV = new SmartOV();
@@ -83,7 +83,7 @@ public class PersoonlijkeGegevensWijzigenPageController extends HttpServlet {
             dao.updatePerson(uuid, naam, postcode, huisnummer, date, telefoonnummer, email);
             response.sendRedirect("/dashboard");
         } catch (SmartOVException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
