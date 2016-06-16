@@ -35,7 +35,12 @@
                         <c:out value="${kaart.koppelDatum}"/>
                     </span>
                     <span class="overview-label">
-                        <a href="verwijder-kaart?kaartId=${kaart.kaartId}">Verwijder</a>
+                        <c:if test="${name == 'SALDOBEHEERDER'}">
+                            <a href="verwijder-kaart?kaartId=${kaart.kaartId}">Ontkoppel</a>
+                        </c:if>
+                        <c:if test="${name == 'KAARTHOUDER'}">
+                            &nbsp;
+                        </c:if>
                     </span>
                 </div>
             </c:forEach>
