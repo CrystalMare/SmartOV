@@ -40,12 +40,13 @@ AS
                 FROM dbo.REIS
                 WHERE KAARTID = @kaartid AND EINDPUNT IS NULL)
     BEGIN
-      INSERT INTO dbo.REIS (REISID, ACCOUNTID, BEGINPUNT, KAARTID)
+      INSERT INTO dbo.REIS (REISID, ACCOUNTID, BEGINPUNT, KAARTID, INCHECKDATUM)
       VALUES (
         NEWID(),
         @accountid,
         @stationid,
-        @kaartid
+        @kaartid,
+        GETDATE()
       )
     END
 
@@ -85,7 +86,8 @@ AS
 
           UPDATE dbo.REIS
           SET EINDPUNT = @stationid,
-            PRIJS      = @costs
+            PRIJS      = @costs,
+            UITCHECKDATUM = GETDATE()
           WHERE REISID = @reisid
 
           UPDATE dbo.ACCOUNT
@@ -113,3 +115,6 @@ AS
     SELECT @ErrorState = ERROR_STATE();
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
+
+  EXECUTE sp_addmessage 56192, 16, 'Kan niet reizen als kaart niet gekoppeld is aan een account';
+  EXECUTE sp_addmessage 56190, 16, 'Onvoldoende saldo';

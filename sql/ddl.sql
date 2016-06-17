@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2012                    */
-/* Created on:     13-6-2016 14:33:18                           */
+/* Created on:     16-6-2016 11:30:58                           */
 /*==============================================================*/
 
 
@@ -441,6 +441,8 @@ create table ACCOUNT (
    PERSOONID            SURROGATEKEY         not null,
    SALDO                GELD                 not null,
    REKENINGNUMMER       BANKREKENING         null,
+   AUTOMATISCH_OPWAARDEREN bit                  not null,
+   OPWAARDEERSALDO      GELD                 null,
    constraint PK_ACCOUNT primary key (ACCOUNTID)
 )
 go
@@ -611,11 +613,13 @@ go
 /*==============================================================*/
 create table REIS (
    REISID               SURROGATEKEY         not null,
-   EINDPUNT             SURROGATEKEY         null,
-   ACCOUNTID            SURROGATEKEY         not null,
    BEGINPUNT            SURROGATEKEY         not null,
+   ACCOUNTID            SURROGATEKEY         not null,
+   EINDPUNT             SURROGATEKEY         null,
    KAARTID              SURROGATEKEY         not null,
    PRIJS                GELD                 null,
+   INCHECKDATUM         DATUM                not null,
+   UITCHECKDATUM        DATUM                null,
    constraint PK_REIS primary key (REISID)
 )
 go
@@ -647,7 +651,7 @@ go
 
 
 
-create nonclustered index FK_BEGINPUNT on REIS (BEGINPUNT ASC)
+create nonclustered index FK_BEGINPUNT on REIS (EINDPUNT ASC)
 go
 
 /*==============================================================*/
@@ -657,7 +661,7 @@ go
 
 
 
-create nonclustered index FK_EINDPUNT on REIS (EINDPUNT ASC)
+create nonclustered index FK_EINDPUNT on REIS (BEGINPUNT ASC)
 go
 
 /*==============================================================*/
@@ -737,12 +741,12 @@ alter table REGIOPRODUCT
 go
 
 alter table REIS
-   add constraint FK_REIS_BEGINPUNT_STATION foreign key (BEGINPUNT)
+   add constraint FK_REIS_BEGINPUNT_STATION foreign key (EINDPUNT)
       references STATION (STATIONID)
 go
 
 alter table REIS
-   add constraint FK_REIS_EINDPUNT_STATION foreign key (EINDPUNT)
+   add constraint FK_REIS_EINDPUNT_STATION foreign key (BEGINPUNT)
       references STATION (STATIONID)
 go
 
