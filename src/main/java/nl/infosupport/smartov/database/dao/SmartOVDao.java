@@ -43,13 +43,12 @@ public interface SmartOVDao extends CloseableDao {
      *
      * @param acocuntId      the account
      * @param rekeningNummer the bankaccount to widthdraw money from
-     * @param from           the ammount of money that triggers the autorenewal
      * @param ammount        the ammount of money to add
      * @throws SmartOVException if the account doesnt exist, or already has auto-renewal enabled.
      */
     @ProcedureId(3)
     @ProcedureName("PROC_SET_AUTO_RENEWAL")
-    void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigInteger from, BigInteger ammount)
+    void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigDecimal ammount)
             throws SmartOVException;
 
     /**
