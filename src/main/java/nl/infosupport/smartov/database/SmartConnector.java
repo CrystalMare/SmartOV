@@ -232,8 +232,20 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public BigInteger getCosts(UUID accountId, Date from, Date till) throws SmartOVException {
-        throw new RuntimeException("Method not implemented!");
+    public BigDecimal getCosts(UUID accountId, Date from, Date till) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_COSTS @accountid = ?, @van = ?, @tot = ?"
+            );
+            ps.setString(1, accountId.toString());
+            ps.setDate(2, new java.sql.Date(from.getTime()));
+            ps.setDate(3, new java.sql.Date(till.getTime()));
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getBigDecimal(1);
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override

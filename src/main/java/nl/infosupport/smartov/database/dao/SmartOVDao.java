@@ -158,7 +158,7 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureId(11)
     @ProcedureName("PROC_GET_COSTS")
     @Deprecated
-    BigInteger getCosts(UUID accountId, Date from, Date till) throws SmartOVException;
+    BigDecimal getCosts(UUID accountId, Date from, Date till) throws SmartOVException;
 
     /**
      * Gets all the costs a specific card made for a specific account during a period
