@@ -53,8 +53,18 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
-    public void setAutoRenewal(UUID acocuntId, String rekeningNummer, BigInteger from, BigInteger amount) throws SmartOVException {
-
+    public void setAutoRenewal(UUID accountId, String rekeningNummer, BigDecimal amount) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_SET_AUTO_RENEWAL @accountid = ?, @rekeningnummer = ?, @hoeveelheid = ?;"
+            );
+            ps.setString(1, accountId.toString());
+            ps.setString(2, rekeningNummer);
+            ps.setBigDecimal(3, amount);
+            ps.execute();
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
     }
 
     @Override

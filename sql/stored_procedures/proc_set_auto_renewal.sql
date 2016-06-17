@@ -19,17 +19,22 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-  IF NOT EXISTS(SELECT 1 FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid)
-      RAISERROR (56030, 16, 1)
+  IF NOT EXISTS(SELECT 1
+                FROM dbo.ACCOUNT
+                WHERE ACCOUNTID = @accountid)
+    RAISERROR (56030, 16, 1)
 
-  IF (SELECT AUTOMATISCH_OPWAARDEREN FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid) = 1
-      RAISERROR (56031, 16, 1)
+  IF (SELECT AUTOMATISCH_OPWAARDEREN
+      FROM dbo.ACCOUNT
+      WHERE ACCOUNTID = @accountid) = 1
+    RAISERROR (56031, 16, 1)
 
-  UPDATE dbo.ACCOUNT
-  SET AUTOMATISCH_OPWAARDEREN = 1,
-    OPWAARDEERSALDO           = @hoeveelheid,
-    REKENINGNUMMER            = @rekeningnummer
-  WHERE ACCOUNTID = @accountid
+  IF @hoeveelheid > 0
+    UPDATE dbo.ACCOUNT
+    SET AUTOMATISCH_OPWAARDEREN = 1,
+      OPWAARDEERSALDO           = @hoeveelheid,
+      REKENINGNUMMER            = @rekeningnummer
+    WHERE ACCOUNTID = @accountid
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
