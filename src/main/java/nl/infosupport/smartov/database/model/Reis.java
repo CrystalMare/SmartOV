@@ -13,7 +13,6 @@ import java.util.UUID;
 public class Reis {
     private UUID reisId;
     private UUID beginpunt;
-    private UUID accountId;
     private UUID eindpunt;
     private UUID kaartId;
     private int prijs;

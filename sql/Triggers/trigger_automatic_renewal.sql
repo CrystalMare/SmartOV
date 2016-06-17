@@ -1,4 +1,5 @@
 use smartov
+GO
 
 CREATE TRIGGER trigger_automatic_renewal
   ON dbo.ACCOUNT
