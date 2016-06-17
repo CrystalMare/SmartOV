@@ -438,9 +438,8 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             List<Reis> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(new Reis(UUID.fromString(rs.getString("REISID")), UUID.fromString(rs.getString("BEGINPUNT")),
-                        UUID.fromString(rs.getString("ACCOUNTID")), UUID.fromString(rs.getString("EINDPUNT")),
-                        UUID.fromString(rs.getString("KAARTID")), rs.getInt("PRIJS"), rs.getDate("INCHECKDATUM"),
-                        rs.getDate("UITCHECKDATUM")));
+                        UUID.fromString(rs.getString("EINDPUNT")), UUID.fromString(rs.getString("KAARTID")),
+                        rs.getInt("PRIJS"), rs.getDate("INCHECKDATUM"), rs.getDate("UITCHECKDATUM")));
             }
             return list;
         } catch (SQLException e) {
@@ -460,8 +459,8 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
             List<Reis> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(new Reis(UUID.fromString(rs.getString("REISID")), UUID.fromString(rs.getString("BEGINPUNT")),
-                        UUID.fromString(rs.getString("ACCOUNTID")), UUID.fromString(rs.getString("EINDPUNT")),
-                        UUID.fromString(rs.getString("KAARTID")), rs.getInt("PRIJS"), rs.getDate("INCHECKDATUM"),
+                        UUID.fromString(rs.getString("EINDPUNT")), UUID.fromString(rs.getString("KAARTID")),
+                        rs.getInt("PRIJS"), rs.getDate("INCHECKDATUM"),
                         rs.getDate("UITCHECKDATUM")));
             }
             return list;
