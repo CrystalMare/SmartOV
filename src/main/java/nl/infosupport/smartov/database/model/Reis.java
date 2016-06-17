@@ -18,5 +18,5 @@ public class Reis {
     private int prijs;
     private Date incheckDatum;
     private Date uitcheckDatum;
-
+    private String naam;
 }

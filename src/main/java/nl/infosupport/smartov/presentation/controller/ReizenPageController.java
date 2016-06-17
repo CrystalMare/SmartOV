@@ -61,23 +61,6 @@ public class ReizenPageController extends HttpServlet {
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }
-
-//        boolean checkedIn;
-//        String message = null;
-//
-//        try {
-//            checkedIn = dao.isCheckedIn(kaart);
-//        } catch (SmartOVException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        if (checkedIn)
-//            message = "Ingecheckt";
-//        else
-//            message = "Uitgecheckt";
-//
-//        request.setAttribute("message", message);
-//        request.getRequestDispatcher("reizen.jsp").forward(request, response);
         response.sendRedirect("/reizen");
         out.close();
     }

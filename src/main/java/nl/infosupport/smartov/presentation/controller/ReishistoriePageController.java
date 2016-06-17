@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,20 +28,14 @@ public class ReishistoriePageController extends HttpServlet {
         SmartOV smartOV = new SmartOV();
         SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
 
-        UUID accountID = (UUID) session.getAttribute("accountid");
-        Calendar cal = Calendar.getInstance();
-        Date today = cal.getTime();
-        cal.add(Calendar.YEAR, -10);
-        Date prevYear = cal.getTime();
-        List<Reis> reisList = null;
-
+        List<Reis> reisFromList;
         try {
-            reisList = dao.getJourneys(accountID, prevYear, today);
+            reisFromList = dao.getJourneysFromLocation(UUID.fromString("9C6FBCBC-5055-4A7D-A4FD-DBC496C099D1"), UUID.fromString("6D36C50C-2810-44E1-9117-37432FA4D427"));
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }
 
-        session.setAttribute("reisList", reisList);
+        session.setAttribute("reisFromList", reisFromList);
         request.getRequestDispatcher("reishistorie-inzien.jsp").forward(request, response);
     }
 

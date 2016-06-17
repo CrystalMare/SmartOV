@@ -12,6 +12,7 @@
             </c:if>
             <c:if test="${name == 'SALDOBEHEERDER'}">
                 <li class="nav-item"><a href="saldo-opwaarderen" class="nav-link">Saldo opwaarderen</a></li>
+                <li class="nav-item"><a href="automatisch-opwaarderen" class="nav-link">Automatisch opwaarderen</a></li>
                 <li class="nav-item"><a href="persoonlijke-gegevens-wijzigen" class="nav-link">Persoonlijke gegevens wijzigen</a></li>
                 <li class="nav-item"><a href="gekoppelde-kaarten" class="nav-link">Gekoppelde kaarten</a></li>
                 <li class="nav-item"><a href="kostenoverzicht" class="nav-link">Kosten</a></li>

@@ -11,7 +11,25 @@
 <%@include file="navigation.jsp"%>
 <div class="main" role="main">
     <div class="container">
-
+        <span class="main-title">Reishistorie</span>
+        <div class="overview">
+            <div class="overview-head">
+                <span class="overview-title">Naam</span>
+                <span class="overview-title">Prijs</span>
+                <span class="overview-title">Incheckdatum</span>
+                <span class="overview-title">Uitcheckdatum</span>
+                <span class="overview-title">Eindpunt</span>
+            </div>
+            <c:forEach items="${reisFromList}" var="reisFromList">
+                <div class="overview-item">
+                    <span class="overview-label"><c:out value="${reisFromList.naam}"/></span>
+                    <span class="overview-label"><c:out value="${reisFromList.prijs}"/></span>
+                    <span class="overview-label"><c:out value="${reisFromList.incheckDatum}"/></span>
+                    <span class="overview-label"><c:out value="${reisFromList.uitcheckDatum}"/></span>
+                    <span class="overview-label"><c:out value=""/></span>
+                </div>
+            </c:forEach>
+        </div>
     </div>
 </div>
 <%@include file="footer.jsp"%>
