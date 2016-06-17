@@ -19,16 +19,23 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-  IF NOT EXISTS(SELECT 1 FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid)
-      RAISERROR (56110, 16, 1)
+  IF NOT EXISTS(SELECT 1
+                FROM dbo.ACCOUNT
+                WHERE ACCOUNTID = @accountid)
+    RAISERROR (56110, 16, 1)
 
-  SELECT SUM(PRIJS) AS totalekosten
-  FROM dbo.REIS
-  WHERE ACCOUNTID = @accountid
-  AND
-    REIS.UITCHECKDATUM < @tot
-  AND
-    REIS.UITCHECKDATUM > @van
+  DECLARE @money MONEY = (SELECT SUM(PRIJS) AS totalekosten
+                          FROM dbo.REIS
+                          WHERE ACCOUNTID = @accountid
+                                AND
+                                REIS.UITCHECKDATUM < @tot
+                                AND
+                                REIS.UITCHECKDATUM > @van)
+
+  IF @money IS NULL
+      SET @money = 0;
+
+  SELECT @money AS totalekosten;
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
