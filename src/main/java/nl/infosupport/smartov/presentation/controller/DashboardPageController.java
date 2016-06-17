@@ -22,22 +22,21 @@ public class DashboardPageController extends HttpServlet {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.getUserSession(request, response);
 
-        UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
-
         HttpSession session = request.getSession();
-        session.setAttribute("accountid", uuid);
+        UUID uuid = null;
+
+        switch (session.getAttribute("name").toString()) {
+            case "KAARTHOUDER":
+                uuid = UUID.fromString("AA625061-7D89-49B9-98CD-0C62D7706578");
+                session.setAttribute("personid", uuid);
+                break;
+            case "SALDOBEHEERDER":
+                uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
+                session.setAttribute("accountid", uuid);
+                break;
+        }
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-
-            out.close();
-
-            //request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
 }

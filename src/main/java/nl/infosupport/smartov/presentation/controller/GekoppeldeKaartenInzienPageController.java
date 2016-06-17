@@ -29,32 +29,40 @@ public class GekoppeldeKaartenInzienPageController extends HttpServlet {
         sessionHandler.getUserSession(request, response);
 
         HttpSession session = request.getSession();
-
-        UUID uuid = UUID.fromString(String.valueOf(session.getAttribute("accountid")));
         SmartOV smartOV = new SmartOV();
         SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
-        List<Kaart> kaartList = null;
-        try {
-            kaartList = dao.getCardsByAccountDetailed(uuid);
-        } catch (SmartOVException e) {
-            e.printStackTrace();
+
+        List<Kaart> kaartList = new ArrayList<>();
+        UUID uuid = null;
+
+        switch (session.getAttribute("name").toString()) {
+            case "KAARTHOUDER":
+                uuid = (UUID) session.getAttribute("personid");
+                try {
+                    kaartList = dao.getCardsByOwner(uuid);
+                } catch (SmartOVException e) {
+                    throw new RuntimeException(e);
+                }
+
+                session.setAttribute("personid", uuid);
+
+                break;
+            case "SALDOBEHEERDER":
+                uuid = (UUID) session.getAttribute("accountid");
+
+                try {
+                    kaartList = dao.getCardsByAccountDetailed(uuid);
+                } catch (SmartOVException e) {
+                    throw new RuntimeException(e);
+                }
+
+                session.setAttribute("accountid", uuid);
+
+                break;
         }
-        session.setAttribute("accountid", uuid);
-        session.setAttribute("kaart", kaartList);
+        session.setAttribute("kaartList", kaartList);
         request.getRequestDispatcher("gekoppelde-kaarten-inzien.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
-
-
-        out.close();
-
-        //request.getRequestDispatcher("login.jsp").forward(request, response);
-    }
 }
 

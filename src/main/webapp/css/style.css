@@ -19,6 +19,7 @@ body {
     max-width: 1200px;
     width: 100%;
     padding: 0 20px;
+    position: relative;
 }
 
 .cboth {
@@ -71,6 +72,11 @@ body {
     display: block;
     text-align: center;
     padding: 0 0 30px;
+}
+
+.main-span {
+    padding: 20px 0;
+    display: block;
 }
 
 .nav {
@@ -154,6 +160,15 @@ body {
     font-size: 1em;
 }
 
+.login-select {
+    display: block;
+    padding: 6px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .btn {
     display: block;
     background-color: green;
@@ -161,8 +176,14 @@ body {
     padding: 5px 10px;
     color: #fff;
     font-size: 1em;
-    width: 50%;
     font-weight: bold;
+    text-decoration: none;
+}
+
+.btn.for-add {
+    position: absolute;
+    right: 20px;
+    top: 0;
 }
 
 .btn:hover {
@@ -271,6 +292,7 @@ body {
 
 .overview-item {
     width: 100%;
+    clear: both;
 }
 
 .overview-label {
@@ -279,6 +301,38 @@ body {
     float: left;
     display: table-cell;
     text-transform: capitalize;
+}
+
+/* REIS */
+
+.reis {
+    overflow: hidden;
+}
+
+.reis-label {
+    float: left;
+    padding: 6px;
+    width: 25%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.reis-select {
+    float: left;
+    padding: 6px;
+    width: 25%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.reis .btn {
+    float: left;
+    width: 25%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* FOOTER */

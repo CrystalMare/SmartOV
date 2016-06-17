@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -11,7 +12,10 @@
 <%@include file="navigation.jsp"%>
 <div class="main" role="main">
     <div class="container">
-        <span class="main-title">Gekoppelde kaarten</span>
+        <span class="main-title">Kaarten</span>
+        <c:if test="${name == 'SALDOBEHEERDER'}">
+            <a href="gekoppelde-kaarten-toevoegen" class="btn for-add">Kaart toevoegen</a>
+        </c:if>
         <div class="overview">
             <div class="overview-head">
                 <span class="overview-title">Kaartnummer</span>
@@ -20,13 +24,24 @@
                 <span class="overview-title">Koppeldatum</span>
                 <span class="overview-title">&nbsp;</span>
             </div>
-            <c:forEach items="${kaart}" var="kaart">
+            <c:forEach items="${kaartList}" var="kaart">
                 <div class="overview-item">
-                    <span class="overview-label"><c:out value="${kaart.kaartNummer}"/></span>
+                    <span class="overview-label"><a href="reisproduct-inzien?kaartId=${kaart.kaartId}"><c:out value="${kaart.kaartNummer}"/></a></span>
                     <span class="overview-label"><c:out value="${kaart.kaartNaam}"/></span>
-                    <span class="overview-label"><c:out value="${kaart.vervalDatum}"/></span>
-                    <span class="overview-label"><c:out value="${kaart.koppelDatum}"/></span>
-                    <span class="overview-label"><a href="verwijder-kaart?kaartId=${kaart.kaartId}">Verwijder</a></span>
+                    <span class="overview-label">
+                        <c:out value="${kaart.vervalDatum}"/>
+                    </span>
+                    <span class="overview-label">
+                        <c:out value="${kaart.koppelDatum}"/>
+                    </span>
+                    <span class="overview-label">
+                        <c:if test="${name == 'SALDOBEHEERDER'}">
+                            <a href="verwijder-kaart?kaartId=${kaart.kaartId}">Ontkoppel</a>
+                        </c:if>
+                        <c:if test="${name == 'KAARTHOUDER'}">
+                            &nbsp;
+                        </c:if>
+                    </span>
                 </div>
             </c:forEach>
         </div>

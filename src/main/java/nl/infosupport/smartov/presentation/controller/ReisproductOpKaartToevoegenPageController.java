@@ -3,18 +3,23 @@ package nl.infosupport.smartov.presentation.controller;
 import nl.infosupport.smartov.database.SmartOV;
 import nl.infosupport.smartov.database.SmartOVException;
 import nl.infosupport.smartov.database.dao.SmartOVDao;
+import nl.infosupport.smartov.database.model.Kaart;
+import nl.infosupport.smartov.database.model.Reisproduct;
 import nl.infosupport.smartov.presentation.controller.session.SessionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
-@WebServlet(urlPatterns = "/saldo-opwaarderen")
-public class SaldoOpwaarderenPageController extends HttpServlet {
+@WebServlet(urlPatterns = "/reisproduct-toevoegen")
+public class ReisproductOpKaartToevoegenPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,41 +28,35 @@ public class SaldoOpwaarderenPageController extends HttpServlet {
         SessionHandler sessionHandler = new SessionHandler();
         sessionHandler.getUserSession(request, response);
 
-        UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
-
+        HttpSession session = request.getSession();
         SmartOV smartOV = new SmartOV();
-
-        String saldo = "";
-
+        List<Reisproduct> reisproductList = null;
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
-            saldo = String.format("%.2f", dao.getSaldo(uuid));
+            reisproductList = dao.getAllAvailableProducts((UUID) session.getAttribute("kaartId"));
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("saldo", saldo);
-        session.setMaxInactiveInterval(30 * 60);
+        session.setAttribute("reisproduct", reisproductList);
 
-        request.getRequestDispatcher("saldo-opwaarderen.jsp").forward(request, response);
+        request.getRequestDispatcher("reisproduct-op-kaart-toevoegen.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-
-        String saldo = request.getParameter("saldo");
+        UUID reisproduct = UUID.fromString(request.getParameter("reisproduct"));
+        HttpSession session = request.getSession();
         SmartOV smartOV = new SmartOV();
-
-        UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
-
+        UUID kaartID = (UUID) session.getAttribute("kaartId");
         try (SmartOVDao dao = smartOV.getInstance(SmartOVDao.class)) {
-            dao.addSaldo(uuid, new BigDecimal(saldo));
-            response.sendRedirect("/saldo-opwaarderen");
+            dao.assignProductToCard(kaartID, reisproduct);
+            response.sendRedirect("/reisproduct-inzien?kaartId=" + kaartID.toString());
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }
+
         out.close();
     }
 
