@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.*;
 
 @WebServlet(urlPatterns = "/kostenoverzicht")
@@ -27,7 +27,7 @@ public class KostenoverzichtInzienPageController extends HttpServlet {
         SmartOV smartOV = new SmartOV();
         SmartOVDao dao = smartOV.getInstance(SmartOVDao.class);
 
-        BigInteger cost = null;
+        BigDecimal cost = null;
 
         UUID accountID = (UUID) session.getAttribute("accountId");
         Calendar cal = Calendar.getInstance();
