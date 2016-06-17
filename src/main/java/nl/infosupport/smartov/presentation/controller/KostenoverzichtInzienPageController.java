@@ -31,19 +31,16 @@ public class KostenoverzichtInzienPageController extends HttpServlet {
 
         UUID accountID = (UUID) session.getAttribute("accountid");
         Calendar cal = Calendar.getInstance();
-        Date today = cal.getTime();
         cal.add(Calendar.YEAR, -10);
         Date prevYear = cal.getTime();
 
         try {
-            cost = dao.getCosts(accountID, prevYear, today);
+            cost = dao.getCosts(accountID, prevYear, new Date());
         } catch (SmartOVException e) {
             throw new RuntimeException(e);
         }
 
-        session.setAttribute("cost", String.format("%.2f", cost));
-
+        session.setAttribute("cost", String.format("%.2f", cost.floatValue()));
         request.getRequestDispatcher("kostenoverzicht-inzien.jsp").forward(request, response);
     }
-
 }
