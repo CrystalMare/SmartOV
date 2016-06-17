@@ -3,6 +3,7 @@ package nl.infosupport.smartov.presentation.controller;
 import nl.infosupport.smartov.database.SmartOV;
 import nl.infosupport.smartov.database.SmartOVException;
 import nl.infosupport.smartov.database.dao.SmartOVDao;
+import nl.infosupport.smartov.presentation.controller.session.SessionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,13 +17,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.UUID;
 
-@WebServlet(urlPatterns = "automatisch-opwaarderen")
+@WebServlet(urlPatterns = "/automatisch-opwaarderen")
 public class AutomatischOpwaarderenPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
+        SessionHandler sessionHandler = new SessionHandler();
+        sessionHandler.getUserSession(request, response);
 
         request.getRequestDispatcher("automatisch-opwaarderen.jsp").forward(request, response);
     }
@@ -33,7 +34,7 @@ public class AutomatischOpwaarderenPageController extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        BigInteger bedrag = BigInteger.valueOf(Long.parseLong(request.getParameter("saldo")));
+        BigDecimal bedrag = BigDecimal.valueOf(Long.parseLong(request.getParameter("saldo")));
         SmartOV smartOV = new SmartOV();
 
         UUID uuid = UUID.fromString("E6D77591-D3D9-4B2A-A855-8961A71DFEE7");
