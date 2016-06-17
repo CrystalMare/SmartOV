@@ -153,7 +153,6 @@ public interface SmartOVDao extends CloseableDao {
      * @param till      the till filter
      * @return a list of costs made during a specific period with an account
      * @throws SmartOVException if the account doesn't exist
-     * @deprecated the API for costs is not stable yet, this method will probably change
      */
     @ProcedureId(11)
     @ProcedureName("PROC_GET_COSTS")

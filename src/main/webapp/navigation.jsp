@@ -8,6 +8,7 @@
                 <li class="nav-item"><a href="persoonlijke-gegevens-wijzigen" class="nav-link">Persoonlijke gegevens wijzigen</a></li>
                 <li class="nav-item"><a href="gekoppelde-kaarten" class="nav-link">Gekoppelde kaarten</a></li>
                 <li class="nav-item"><a href="reizen" class="nav-link">Reizen</a></li>
+                <li class="nav-item"><a href="reishistorie" class="nav-link">Reishistorie</a></li>
             </c:if>
             <c:if test="${name == 'SALDOBEHEERDER'}">
                 <li class="nav-item"><a href="saldo-opwaarderen" class="nav-link">Saldo opwaarderen</a></li>
