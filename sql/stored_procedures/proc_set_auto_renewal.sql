@@ -1,14 +1,15 @@
 USE smartov -- EXAMPLE DATABASENAME
 GO
 
-IF OBJECT_ID('PROC_ADD_SALDO', 'P') IS NOT NULL -- EXAMPLE PROCEDURE NAME
-  DROP PROCEDURE PROC_ADD_SALDO
+IF OBJECT_ID('PROC_SET_AUTO_RENEWAL', 'P') IS NOT NULL -- EXAMPLE PROCEDURE NAME
+  DROP PROCEDURE PROC_SET_AUTO_RENEWAL
 GO
 
 -- CREATE STORED PROCEDURE
-CREATE PROCEDURE PROC_ADD_SALDO -- EXAMPLE NAME
-    @accountid UNIQUEIDENTIFIER, -- EXAMPLE PARAMETERS
-    @saldo INT
+CREATE PROCEDURE PROC_SET_AUTO_RENEWAL -- EXAMPLE NAME
+    @accountid      UNIQUEIDENTIFIER, -- EXAMPLE PARAMETERS
+    @rekeningnummer VARCHAR(34),
+    @hoeveelheid    MONEY
 AS
   DECLARE @TranCounter INT;
   SET @TranCounter = @@TRANCOUNT;
@@ -18,20 +19,17 @@ AS
     BEGIN TRANSACTION;
   BEGIN TRY
 
-  IF @saldo + (SELECT SALDO FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid) > 200
-      RAISERROR (56020, 16, 1);
-
   IF NOT EXISTS(SELECT 1 FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid)
-      RAISERROR (56021, 16, 1);
+      RAISERROR (56030, 16, 1)
 
-  IF @saldo  < 0
-      RAISERROR (56022, 16, 1);
+  IF (SELECT AUTOMATISCH_OPWAARDEREN FROM dbo.ACCOUNT WHERE ACCOUNTID = @accountid) = 1
+      RAISERROR (56031, 16, 1)
 
   UPDATE dbo.ACCOUNT
-  SET
-    SALDO = @saldo + SALDO
-  OUTPUT INSERTED.SALDO
-  WHERE ACCOUNTID  = @accountid
+  SET AUTOMATISCH_OPWAARDEREN = 1,
+    OPWAARDEERSALDO           = @hoeveelheid,
+    REKENINGNUMMER            = @rekeningnummer
+  WHERE ACCOUNTID = @accountid
 
   IF @TranCounter = 0
     COMMIT TRANSACTION;
@@ -52,7 +50,3 @@ AS
     SELECT @ErrorState = ERROR_STATE();
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
-
-  EXECUTE sp_addmessage 56020, 16, 'Het saldo mag niet hoger dan 200 euro zijn!', @replace = REPLACE;
-  EXECUTE sp_addmessage 56021, 16, 'Account bestaat niet!', @replace = REPLACE;
-  EXECUTE sp_addmessage 56022, 16, 'Ingevoerde saldo mag niet negatief zijn!', @replace = REPLACE;

@@ -43,7 +43,8 @@ AS
       RAISERROR (56062,16,1);
 
   Update dbo.KAART
-  SET dbo.KAART.ACCOUNTID = @account
+  SET dbo.KAART.ACCOUNTID = @account,
+    KOPPELDATUM = GETDATE()
   WHERE KAARTID = @kaart
 
   IF @TranCounter = 0
