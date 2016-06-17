@@ -427,6 +427,50 @@ class SmartConnector extends SqlConnector implements SmartOVDao {
     }
 
     @Override
+    public List<Reis> getJourneysToLocation(UUID kaartId, UUID stationId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_JOURNEYS_TO_LOCATION @kaartid = ?, @locatie = ?;"
+            );
+            ps.setString(1, kaartId.toString());
+            ps.setString(2, stationId.toString());
+            ResultSet rs = ps.executeQuery();
+            List<Reis> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(new Reis(UUID.fromString(rs.getString("REISID")), UUID.fromString(rs.getString("BEGINPUNT")),
+                        UUID.fromString(rs.getString("ACCOUNTID")), UUID.fromString(rs.getString("EINDPUNT")),
+                        UUID.fromString(rs.getString("KAARTID")), rs.getInt("PRIJS"), rs.getDate("INCHECKDATUM"),
+                        rs.getDate("UITCHECKDATUM")));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
+    public List<Reis> getJourneysFromLocation(UUID kaartId, UUID stationId) throws SmartOVException {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "EXECUTE smartov.dbo.PROC_GET_JOURNEYS_FROM_LOCATION @kaartid = ?, @locatie = ?;"
+            );
+            ps.setString(1, kaartId.toString());
+            ps.setString(2, stationId.toString());
+            ResultSet rs = ps.executeQuery();
+            List<Reis> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(new Reis(UUID.fromString(rs.getString("REISID")), UUID.fromString(rs.getString("BEGINPUNT")),
+                        UUID.fromString(rs.getString("ACCOUNTID")), UUID.fromString(rs.getString("EINDPUNT")),
+                        UUID.fromString(rs.getString("KAARTID")), rs.getInt("PRIJS"), rs.getDate("INCHECKDATUM"),
+                        rs.getDate("UITCHECKDATUM")));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new SmartOVException(e);
+        }
+    }
+
+    @Override
     public List<Reisproduct> getAllAvailableProducts(UUID cardId) throws SmartOVException {
         try {
             PreparedStatement ps = connection.prepareStatement(

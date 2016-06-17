@@ -3,6 +3,7 @@ package nl.infosupport.smartov.database.dao;
 import nl.infosupport.smartov.database.SmartOVException;
 import nl.infosupport.smartov.database.model.*;
 
+import javax.persistence.PostRemove;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -354,6 +355,14 @@ public interface SmartOVDao extends CloseableDao {
     @ProcedureId(27)
     @ProcedureName("PROC_GET_ACCOUNTS_BY_PERSON")
     List<UUID> getAccountsByPerson(UUID personId) throws SmartOVException;
+
+    @ProcedureId(28)
+    @ProcedureName("PROC_GET_JOURNEYS_TO_LOCATION")
+    List<Reis> getJourneysToLocation(UUID kaartId, UUID stationId) throws SmartOVException;
+
+    @ProcedureId(29)
+    @ProcedureName("PROC_GET_JOURNEYS_FROM_LOCATION")
+    List<Reis> getJourneysFromLocation(UUID kaartId, UUID stationId) throws SmartOVException;
 
     /**
      * Gets all products that are available for adding to a card
